@@ -1,0 +1,2634 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulador SESMT: Corredor Industrial Pixel</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+
+    :root {
+      --bg-dark: #090d14;
+      --panel-bg: #121824;
+      --pixel-yellow: #facc15;
+      --pixel-blue: #38bdf8;
+      --pixel-green: #4ade80;
+      --pixel-red: #f87171;
+      --pixel-orange: #fb923c;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: #e2e8f0;
+      font-family: 'Press Start 2P', monospace;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .screen {
+      display: none;
+      width: 100vw;
+      height: 100vh;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    #titleScreen {
+      background: radial-gradient(circle at center, #1b263b 0%, #090d14 90%);
+      padding: 24px;
+      text-align: center;
+    }
+
+    .title-header-badge {
+      font-size: 10px;
+      color: var(--pixel-yellow);
+      background: #1e293b;
+      border: 2px solid var(--pixel-yellow);
+      padding: 6px 14px;
+      letter-spacing: 2px;
+      box-shadow: 4px 4px 0 #000;
+      margin-top: 10px;
+    }
+
+    .title-main-box {
+      margin: auto 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .pixel-title {
+      font-size: 26px;
+      line-height: 1.4;
+      color: #ffffff;
+      text-shadow: 4px 4px 0 #0284c7, 8px 8px 0 #000;
+      letter-spacing: 2px;
+    }
+
+    .pixel-subtitle {
+      font-family: 'VT323', monospace;
+      font-size: 22px;
+      color: #94a3b8;
+      letter-spacing: 1px;
+    }
+
+    .players-preview-art {
+      display: flex;
+      gap: 40px;
+      margin: 15px 0;
+    }
+
+    .preview-card {
+      background: #162032;
+      border: 3px solid #334155;
+      padding: 10px 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 4px 4px 0 #000;
+    }
+
+    .preview-card span {
+      font-size: 8px;
+      color: #cbd5e1;
+    }
+
+    .menu-options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 280px;
+    }
+
+    .pixel-btn {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 11px;
+      color: #ffffff;
+      background: #1e293b;
+      border: 3px solid #475569;
+      padding: 12px 14px;
+      cursor: pointer;
+      box-shadow: 4px 4px 0 #000;
+      transition: transform 0.1s, background 0.1s, border-color 0.1s;
+      text-align: center;
+    }
+
+    .pixel-btn:hover {
+      background: #2563eb;
+      border-color: #93c5fd;
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0 #000;
+    }
+
+    .pixel-btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0 #000;
+    }
+
+    .pixel-btn.primary {
+      background: #059669;
+      border-color: #6ee7b7;
+    }
+
+    .pixel-btn.primary:hover {
+      background: #10b981;
+      border-color: #a7f3d0;
+    }
+
+    .title-footer-row {
+      width: 100%;
+      max-width: 900px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding-top: 10px;
+      border-top: 2px dashed #334155;
+    }
+
+    .footer-note {
+      font-size: 8px;
+      color: #64748b;
+    }
+
+    .btn-small-link {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 8px;
+      background: none;
+      border: 2px solid #475569;
+      color: #cbd5e1;
+      padding: 6px 10px;
+      cursor: pointer;
+    }
+
+    .btn-small-link:hover {
+      background: #334155;
+      color: #fff;
+    }
+
+    #gameScreen {
+      background: #090d14;
+      justify-content: center;
+      align-items: center;
+      padding: 8px;
+    }
+
+    .hud-top-bar {
+      width: 100%;
+      max-width: 960px;
+      background: #162032;
+      border: 3px solid #334155;
+      padding: 8px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 4px 4px 0 #000;
+      margin-bottom: 6px;
+      font-size: 9px;
+    }
+
+    .hud-chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hud-chip strong {
+      color: var(--pixel-yellow);
+    }
+
+    .canvas-viewport-wrapper {
+      position: relative;
+      border: 4px solid #334155;
+      box-shadow: 0 0 0 2px #000, 8px 8px 0 #000;
+      background: #000;
+    }
+
+    canvas#pixelCanvas {
+      display: block;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+      width: 960px;
+      height: 540px;
+    }
+
+    .controls-banner-bottom {
+      width: 100%;
+      max-width: 960px;
+      background: #111827;
+      border: 2px solid #374151;
+      margin-top: 6px;
+      padding: 6px 12px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      font-size: 8px;
+      color: #94a3b8;
+    }
+
+    .banner-badge-p1 { color: var(--pixel-blue); }
+    .banner-badge-p2 { color: var(--pixel-green); }
+
+    .retro-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(2px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 16px;
+    }
+
+    .retro-modal-window {
+      background: #0f172a;
+      border: 4px solid var(--pixel-yellow);
+      box-shadow: 8px 8px 0 #000;
+      max-width: 800px;
+      width: 100%;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .retro-modal-header {
+      border-bottom: 3px solid #334155;
+      padding-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .retro-modal-title {
+      font-size: 13px;
+      color: var(--pixel-yellow);
+      line-height: 1.3;
+    }
+
+    .scenario-story-box {
+      font-family: 'VT323', monospace;
+      font-size: 19px;
+      color: #cbd5e1;
+      background: #1e293b;
+      border: 2px solid #334155;
+      padding: 10px 12px;
+      line-height: 1.25;
+    }
+
+    .checklist-split-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .checklist-col {
+      background: #162032;
+      border: 2px solid #334155;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .col-header-p1 {
+      font-size: 8.5px;
+      color: var(--pixel-blue);
+      border-bottom: 2px dashed #334155;
+      padding-bottom: 4px;
+    }
+
+    .col-header-p2 {
+      font-size: 8.5px;
+      color: var(--pixel-green);
+      border-bottom: 2px dashed #334155;
+      padding-bottom: 4px;
+    }
+
+    .pixel-option-row {
+      font-family: 'VT323', monospace;
+      font-size: 17px;
+      color: #e2e8f0;
+      background: #1e293b;
+      border: 2px solid #334155;
+      padding: 6px 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.1s;
+    }
+
+    .pixel-option-row:hover {
+      border-color: #94a3b8;
+      background: #273549;
+    }
+
+    .pixel-option-row.selected-p1 {
+      background: #0369a1;
+      border-color: var(--pixel-blue);
+      color: #fff;
+    }
+
+    .pixel-option-row.selected-p2 {
+      background: #047857;
+      border-color: var(--pixel-green);
+      color: #fff;
+    }
+
+    .retro-badge-key {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 7px;
+      background: #000;
+      color: #fff;
+      padding: 2px 4px;
+      border: 1px solid #475569;
+    }
+
+    .modal-action-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 6px;
+    }
+
+    .status-items-count {
+      font-size: 8px;
+      color: #94a3b8;
+    }
+
+    .retro-review-panel {
+      font-family: 'VT323', monospace;
+      font-size: 18px;
+      line-height: 1.3;
+      color: #cbd5e1;
+      background: #1e293b;
+      padding: 12px;
+      border: 2px solid #334155;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    /* =========================================================================
+       TELA DE ENDING E TRANSIÇÃO GRADUAL (FADE TO BLACK)
+       ========================================================================= */
+    #endingFadeBlackOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: #000000;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 500;
+      transition: opacity 2.8s ease-in-out;
+    }
+
+    #endingFadeBlackOverlay.fade-active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #endingScreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: radial-gradient(circle at center, #111a2e 0%, #030712 95%);
+      z-index: 510;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 2.2s ease-in 0.6s;
+      overflow-y: auto;
+      padding: 24px;
+      text-align: center;
+    }
+
+    #endingScreen.ending-visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .ending-header-badge {
+      font-size: 11px;
+      color: var(--pixel-green);
+      background: #064e3b;
+      border: 2px solid var(--pixel-green);
+      padding: 6px 16px;
+      letter-spacing: 2px;
+      box-shadow: 4px 4px 0 #000;
+      margin-bottom: 12px;
+    }
+
+    .ending-main-title {
+      font-size: 20px;
+      line-height: 1.45;
+      color: var(--pixel-yellow);
+      text-shadow: 3px 3px 0 #b45309, 6px 6px 0 #000;
+      letter-spacing: 1.5px;
+      max-width: 900px;
+      margin-bottom: 14px;
+    }
+
+    .ending-subtitle {
+      font-family: 'VT323', monospace;
+      font-size: 24px;
+      color: #93c5fd;
+      max-width: 820px;
+      line-height: 1.3;
+      margin-bottom: 16px;
+    }
+
+    .ending-credits-card {
+      background: #0f172a;
+      border: 4px solid #38bdf8;
+      box-shadow: 8px 8px 0 #000;
+      max-width: 700px;
+      width: 100%;
+      padding: 20px;
+      margin-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .ending-credits-title {
+      font-size: 11px;
+      color: #facc15;
+      border-bottom: 2px dashed #334155;
+      padding-bottom: 8px;
+      letter-spacing: 1px;
+    }
+
+    .ending-creators-list {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      margin: 4px 0;
+    }
+
+    .creator-badge {
+      font-family: 'VT323', monospace;
+      font-size: 21px;
+      color: #ffffff;
+      background: #1e293b;
+      border: 1px solid #475569;
+      padding: 8px 12px;
+      letter-spacing: 1.5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+
+  <audio id="bgmCustomEndingAudio" loop preload="auto"></audio>
+
+  <div id="endingFadeBlackOverlay"></div>
+
+  <section id="endingScreen">
+    <div class="ending-header-badge">★ PROTOCOLO DE SEGURANÇA 100% CUMPRIDO ★</div>
+    
+    <h1 class="ending-main-title">“VOCÊ GARANTIU A SEGURANÇA NO TRABALHO”</h1>
+    
+    <p class="ending-subtitle">
+      Todas as áreas de risco foram controladas com excelência segundo as Normas Regulamentadoras.<br>
+      Ao final do expediente, todos os operadores e fiscais voltam sãos e salvos para casa!
+    </p>
+
+    <div class="ending-credits-card">
+      <div class="ending-credits-title">✦ AGRADECIMENTO ESPECIAL AOS CRIADORES ✦</div>
+      <div class="ending-creators-list">
+        <div class="creator-badge">Caio Chaves Umeta Romeiro Tavares</div>
+        <div class="creator-badge">Felipe Dutra dos Anjos</div>
+        <div class="creator-badge">Pedro Gabriel Sanches Mariotto</div>
+        <div class="creator-badge">Ricardo de Souza Junior</div>
+      </div>
+    </div>
+
+    <div>
+      <button class="pixel-btn primary" style="font-size:12px; padding:16px 32px;" onclick="backToMainMenuFromEnding()">
+        RETORNAR A TELA DE INICIO
+      </button>
+    </div>
+  </section>
+
+  <section class="screen active" id="titleScreen">
+    <div class="title-header-badge">★ SISTEMA DE GESTÃO SESMT • MODO COOPERATIVO ★</div>
+
+    <div class="title-main-box">
+      <h1 class="pixel-title">PROTOCOLO DUPLO<br><span style="color:var(--pixel-yellow); font-size: 19px;">CORREDOR INDUSTRIAL PIXEL</span></h1>
+      <p class="pixel-subtitle">PERCORRA O CORREDOR EM DUPLA E LIBERE AS SALAS DE RISCO</p>
+
+      <div class="players-preview-art">
+        <div class="preview-card">
+          <canvas id="previewP1" width="32" height="40" style="image-rendering: pixelated;"></canvas>
+          <span style="color:var(--pixel-blue); font-weight:bold;">OPERADOR</span>
+          <span>MOVER: W, A, S, D</span>
+        </div>
+        <div class="preview-card">
+          <canvas id="previewP2" width="32" height="40" style="image-rendering: pixelated;"></canvas>
+          <span style="color:var(--pixel-green); font-weight:bold;">FISCAL SESMT</span>
+          <span>MOVER: SETAS</span>
+        </div>
+      </div>
+
+      <div class="menu-options-list">
+        <button class="pixel-btn primary" onclick="enterGameCorridor()">▶ INICIAR CORREDOR</button>
+        <button class="pixel-btn" onclick="openModal('settingsModal')">⚙ CONFIGURAÇÕES</button>
+        <button class="pixel-btn" onclick="openModal('exitModal')">🚪 SAIR</button>
+      </div>
+    </div>
+
+    <div class="title-footer-row">
+      <span class="footer-note">NR-10 • NR-12 • NR-20 • NR-33 • NR-35 | SEGURANÇA TOTAL</span>
+    </div>
+  </section>
+
+  <section class="screen" id="gameScreen">
+    <div class="hud-top-bar">
+      <div class="hud-chip">
+        <span>SALAS:</span>
+        <strong id="hudRoomsCleared">0 / 5</strong>
+      </div>
+      <div class="hud-chip" id="hudP1HealthChip">
+        <span style="color:var(--pixel-blue);">P1 HP:</span>
+        <strong id="hudP1Hp" style="color:#4ade80;">10/10</strong>
+      </div>
+      <div class="hud-chip">
+        <span id="hudSectorSign" style="color:var(--pixel-blue);">CORREDOR INDUSTRIAL</span>
+      </div>
+      <div class="hud-chip" id="hudP2HealthChip">
+        <span style="color:var(--pixel-green);">P2 HP:</span>
+        <strong id="hudP2Hp" style="color:#4ade80;">10/10</strong>
+      </div>
+      <div class="hud-chip">
+        <span>PTS:</span>
+        <strong id="hudTotalScore">0</strong>
+      </div>
+      <div class="hud-chip">
+        <button class="btn-small-link" onclick="toggleAudioQuick()" id="btnAudioToggleHUD">🔊 SOM</button>
+        <button class="btn-small-link" onclick="backToMainMenu()">🏠 MENU</button>
+      </div>
+    </div>
+
+    <div class="canvas-viewport-wrapper">
+      <canvas id="pixelCanvas" width="640" height="360"></canvas>
+    </div>
+
+    <div class="controls-banner-bottom">
+      <div><span class="banner-badge-p1">P1:</span> W,A,S,D</div>
+      <div><span class="banner-badge-p2">P2:</span> SETAS</div>
+    </div>
+  </section>
+
+  <div class="retro-modal-overlay hidden" id="checklistModal">
+    <div class="retro-modal-window">
+      <div class="retro-modal-header">
+        <div>
+          <span style="font-size:8px; color:var(--pixel-yellow);" id="modalRoomNorm">NR-XX</span>
+          <h3 class="retro-modal-title" id="modalRoomTitle">NOME DA SALA</h3>
+        </div>
+        <div style="font-size:10px; color:var(--pixel-orange);" id="modalTimerBox">⏱ 00:35</div>
+      </div>
+
+      <div class="scenario-story-box" id="modalRoomDesc">
+        Breve contextualização técnica do perigo detectado na área de trabalho.
+      </div>
+
+      <div class="checklist-split-grid">
+        <div class="checklist-col">
+          <div class="col-header-p1">OPERADOR • SELECIONE 2 EPIs (Teclas 1, 2, 3, 4)</div>
+          <div id="p1OptionsBox" style="display:flex; flex-direction:column; gap:6px;"></div>
+        </div>
+
+        <div class="checklist-col">
+          <div class="col-header-p2">FISCAL • SELECIONE 2 MEDIDAS (Teclas 7, 8, 9, 0)</div>
+          <div id="p2OptionsBox" style="display:flex; flex-direction:column; gap:6px;"></div>
+        </div>
+      </div>
+
+      <div class="modal-action-row">
+        <div class="status-items-count">
+          <span id="p1StatusText" style="color:var(--pixel-blue);">P1: 0/2</span> | 
+          <span id="p2StatusText" style="color:var(--pixel-green);">P2: 0/2</span>
+        </div>
+        <button class="pixel-btn primary" style="font-size:9px; padding:8px 16px;" onclick="submitChecklist()">
+          VALIDAR LIBERAÇÃO [ESPAÇO]
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="retro-modal-overlay hidden" id="reviewModal">
+    <div class="retro-modal-window">
+      <div class="retro-modal-header">
+        <h3 class="retro-modal-title" id="reviewResultTitle">PARECER DA AUDITORIA</h3>
+        <span style="font-size:9px; color:var(--pixel-yellow);" id="reviewScoreEarned">+0 PTS</span>
+      </div>
+
+      <div class="retro-review-panel">
+        <div id="reviewP1Text" style="color:var(--pixel-blue);"></div>
+        <div id="reviewP2Text" style="color:var(--pixel-green);"></div>
+        <div id="reviewNormText" style="color:var(--pixel-yellow); border-top:1px dashed #475569; padding-top:6px;"></div>
+      </div>
+
+      <button class="pixel-btn primary" onclick="closeReviewModal()">AVANÇAR</button>
+    </div>
+  </div>
+
+  <div class="retro-modal-overlay hidden" id="deathModal">
+    <div class="retro-modal-window" style="text-align:center; border-color: var(--pixel-red);">
+      <h3 class="retro-modal-title" style="font-size:16px; color:var(--pixel-red); margin-bottom:10px;">☣ ACIDENTE FATAL / TIROTEIO ☣</h3>
+      <p class="scenario-story-box" id="deathMessage" style="color:#fca5a5; margin-bottom:12px;">
+        Um dos funcionários foi atingido por 10 tiros e não resistiu! O expediente foi suspenso.
+      </p>
+      <button class="pixel-btn primary" style="background:#dc2626; border-color:#fca5a5;" onclick="restartGameFull()">REINICIAR SIMULADOR</button>
+    </div>
+  </div>
+
+  <div class="retro-modal-overlay hidden" id="settingsModal">
+    <div class="retro-modal-window" style="max-width:500px;">
+      <div class="retro-modal-header">
+        <h3 class="retro-modal-title">CONFIGURAÇÕES</h3>
+        <button class="btn-small-link" onclick="closeModal('settingsModal')">X</button>
+      </div>
+      <div class="retro-review-panel" style="gap:14px;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span>MÚSICA CHIPTUNE 8-BIT</span>
+          <button class="pixel-btn" style="font-size:8px; padding:6px 10px;" onclick="toggleAudioQuick()" id="cfgMusicBtn">LIGADA</button>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span>TEMPO POR CENÁRIO</span>
+          <select id="cfgTimeSelect" style="font-family:'VT323'; font-size:18px; padding:2px 8px; background:#1e293b; color:#fff; border:2px solid #475569;" onchange="updateRoundTime(this.value)">
+            <option value="30">30 Segundos</option>
+            <option value="35" selected>35 Segundos (Padrão)</option>
+            <option value="50">50 Segundos (Calmo)</option>
+          </select>
+        </div>
+      </div>
+      <button class="pixel-btn primary" onclick="closeModal('settingsModal')">FECHAR</button>
+    </div>
+  </div>
+
+  <div class="retro-modal-overlay hidden" id="exitModal">
+    <div class="retro-modal-window" style="max-width:440px; text-align:center;">
+      <h3 class="retro-modal-title" style="margin-bottom:12px;">ENCERRAR SESSÃO?</h3>
+      <p class="scenario-story-box" style="margin-bottom:14px;">Deseja realmente sair do simulador de segurança?</p>
+      <div style="display:flex; gap:10px; justify-content:center;">
+        <button class="pixel-btn" onclick="closeModal('exitModal')">CANCELAR</button>
+        <button class="pixel-btn primary" style="background:#dc2626;" onclick="quitApp()">CONFIRMAR SAÍDA</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    class PixelAudioEngine {
+      constructor() {
+        this.ctx = null;
+        this.isPlaying = false;
+        this.isEndingPlaying = false;
+        this.musicEnabled = true;
+        this.timer = null;
+        this.bassTimer = null;
+        this.endingTimer = null;
+        this.endingBassTimer = null;
+      }
+
+      init() {
+        if (!this.ctx) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          this.ctx = new AudioCtx();
+        }
+        if (this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      }
+
+      startMusic() {
+        if (!this.musicEnabled) return;
+        this.init();
+        if (this.isPlaying) return;
+        this.isPlaying = true;
+
+        const melody = [
+          329.63, 392.00, 440.00, 523.25, 440.00, 392.00, 329.63, 293.66,
+          329.63, 329.63, 392.00, 440.00, 587.33, 523.25, 440.00, 392.00
+        ];
+        const bass = [164.81, 196.00, 220.00, 261.63];
+
+        let mIdx = 0;
+        let bIdx = 0;
+
+        this.timer = setInterval(() => {
+          if (!this.isPlaying || !this.musicEnabled) return;
+          this.playBeep(melody[mIdx], 0.12, 'square', 0.08);
+          mIdx = (mIdx + 1) % melody.length;
+        }, 220);
+
+        this.bassTimer = setInterval(() => {
+          if (!this.isPlaying || !this.musicEnabled) return;
+          this.playBeep(bass[bIdx], 0.35, 'triangle', 0.16);
+          bIdx = (bIdx + 1) % bass.length;
+        }, 880);
+      }
+
+      stopMusic() {
+        this.isPlaying = false;
+        clearInterval(this.timer);
+        clearInterval(this.bassTimer);
+      }
+
+      startEndingMusic() {
+        this.stopMusic();
+        this.init();
+        if (this.isEndingPlaying) return;
+        this.isEndingPlaying = true;
+
+        const endingMelody = [
+          523.25, 659.25, 783.99, 1046.50, 783.99, 659.25, 880.00, 1046.50,
+          987.77, 783.99, 659.25, 587.33, 523.25, 659.25, 783.99, 659.25,
+          440.00, 523.25, 659.25, 880.00, 783.99, 659.25, 587.33, 523.25,
+          587.33, 659.25, 783.99, 880.00, 987.77, 1046.50, 1174.66, 1046.50
+        ];
+        const endingBass = [
+          130.81, 164.81, 196.00, 261.63,
+          110.00, 130.81, 164.81, 220.00,
+          174.61, 220.00, 261.63, 349.23,
+          196.00, 246.94, 293.66, 392.00
+        ];
+
+        let mIdx = 0;
+        let bIdx = 0;
+
+        this.endingTimer = setInterval(() => {
+          if (!this.isEndingPlaying) return;
+          this.playBeep(endingMelody[mIdx], 0.22, 'triangle', 0.16);
+          if (mIdx % 2 === 0) {
+            this.playBeep(endingMelody[mIdx] * 0.5, 0.16, 'square', 0.05);
+          }
+          mIdx = (mIdx + 1) % endingMelody.length;
+        }, 210);
+
+        this.endingBassTimer = setInterval(() => {
+          if (!this.isEndingPlaying) return;
+          this.playBeep(endingBass[bIdx], 0.55, 'sine', 0.28);
+          bIdx = (bIdx + 1) % endingBass.length;
+        }, 840);
+      }
+
+      stopEndingMusic() {
+        this.isEndingPlaying = false;
+        clearInterval(this.endingTimer);
+        clearInterval(this.endingBassTimer);
+        const customAudio = document.getElementById('bgmCustomEndingAudio');
+        if (customAudio) {
+          customAudio.pause();
+          customAudio.currentTime = 0;
+        }
+      }
+
+      playBeep(freq, dur, type = 'square', vol = 0.1) {
+        if (!this.ctx) return;
+        try {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+          gain.gain.setValueAtTime(vol, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + dur);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start();
+          osc.stop(this.ctx.currentTime + dur);
+        } catch(e) {}
+      }
+
+      playSfxSelect() {
+        this.init();
+        this.playBeep(587.33, 0.05, 'square', 0.12);
+      }
+
+      playSfxCorrect() {
+        this.init();
+        [523.25, 659.25, 783.99, 1046.50].forEach((f, i) => {
+          setTimeout(() => this.playBeep(f, 0.18, 'triangle', 0.18), i * 70);
+        });
+      }
+
+      playSfxError() {
+        this.init();
+        this.playBeep(180, 0.18, 'sawtooth', 0.2);
+        setTimeout(() => this.playBeep(140, 0.25, 'sawtooth', 0.2), 140);
+      }
+
+      playSfxDoor() {
+        this.init();
+        this.playBeep(440, 0.08, 'triangle', 0.15);
+        setTimeout(() => this.playBeep(880, 0.12, 'square', 0.15), 80);
+      }
+
+      playGunshot() {
+        this.init();
+        if (!this.ctx) return;
+        try {
+          const bufferSize = this.ctx.sampleRate * 0.08;
+          const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+          const data = buffer.getChannelData(0);
+          for (let i = 0; i < bufferSize; i++) {
+            data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.2));
+          }
+          const noise = this.ctx.createBufferSource();
+          noise.buffer = buffer;
+          const gain = this.ctx.createGain();
+          gain.gain.setValueAtTime(0.28, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.08);
+          noise.connect(gain);
+          gain.connect(this.ctx.destination);
+          noise.start();
+          this.playBeep(120, 0.06, 'sawtooth', 0.2);
+        } catch (e) {}
+      }
+
+      playHit() {
+        this.init();
+        this.playBeep(90, 0.12, 'sawtooth', 0.25);
+      }
+
+      playWeaponPickup() {
+        this.init();
+        this.playBeep(440, 0.06, 'triangle', 0.2);
+        setTimeout(() => this.playBeep(880, 0.09, 'square', 0.22), 60);
+      }
+    }
+
+    const sound = new PixelAudioEngine();
+
+    const safetyRooms = [
+      {
+        id: "height",
+        norm: "NR-35",
+        name: "SETOR TELHADO & ALTURA",
+        cleanName: "TELHADO & ALTURA",
+        desc: "Equipe escalada para troca de calha metálica avariada a 8 metros de altura na borda do galpão industrial.",
+        roomX: 30, roomY: 20, roomW: 280, roomH: 190,
+        doorPadX: 120, doorPadY: 200, padW: 100, padH: 26,
+        themeColor: "#facc15",
+        decor: "scaffold",
+        p1Options: [
+          { text: "Cinturão tipo paraquedista c/ talabarte duplo em Y e absorvedor", correct: true },
+          { text: "Capacete de proteção c/ jugular firmemente ajustada", correct: true },
+          { text: "Luvas descartáveis comuns de látex de limpeza", correct: false },
+          { text: "Calçado esportivo de corrida sem sola antiderrapante", correct: false }
+        ],
+        p2Options: [
+          { text: "Emissão formal da Permissão de Trabalho (PT) e ASO de altura", correct: true },
+          { text: "Inspeção e ancoragem homologada em linha de vida certificada", correct: true },
+          { text: "Isolamento do piso dispensado por ser manutenção rápida", correct: false },
+          { text: "Autorização verbal simples do encarregado de turno", correct: false }
+        ],
+        p1Feedback: "O talabarte duplo garante fixação contínua e a jugular evita queda do capacete.",
+        p2Feedback: "A emissão da PT formal e a conferência do ASO em altura são mandatórias.",
+        normRule: "NR-35.4: Toda atividade acima de 2,00m requer Análise de Risco (AR), PT formal e ancoragem homologada."
+      },
+      {
+        id: "confined",
+        norm: "NR-33",
+        name: "SETOR TANQUE & ESGOTO",
+        cleanName: "ESPAÇO CONFINADO",
+        desc: "Limpeza interna em tanque de sedimentação subterrâneo com risco de gás sulfídrico (H2S).",
+        roomX: 340, roomY: 20, roomW: 280, roomH: 190,
+        doorPadX: 430, doorPadY: 200, padW: 100, padH: 26,
+        themeColor: "#38bdf8",
+        decor: "manhole",
+        p1Options: [
+          { text: "Detector multigás calibrado na zona respiratória", correct: true },
+          { text: "Respirador autônomo / linha de ar mandado com pressão positiva", correct: true },
+          { text: "Máscara de pano comum contra poeira", correct: false },
+          { text: "Lanterna manual doméstica sem certificação intrínseca", correct: false }
+        ],
+        p2Options: [
+          { text: "Emissão obrigatória da PET assinada pelo Supervisor Técnico", correct: true },
+          { text: "Vigia treinado postado no exterior com tripé e guincho de resgate", correct: true },
+          { text: "Ventilar o interior usando mangueira de ar comprimido fabril", correct: false },
+          { text: "Autorizar descida individual sem vigia para checagem rápida", correct: false }
+        ],
+        p1Feedback: "O detector multigás monitora gases tóxicos e a linha com pressão previne asfixia.",
+        p2Feedback: "O vigia permanece do lado de fora com guincho de resgate contínuo.",
+        normRule: "NR-33.3: Entrada somente com PET emitida, medição contínua e vigia treinado no exterior."
+      },
+      {
+        id: "electrical",
+        norm: "NR-10",
+        name: "SUBESTAÇÃO ELÉTRICA",
+        cleanName: "SUBESTAÇÃO ELÉTRICA",
+        desc: "Manutenção em cubículo de disjuntor primário de média tensão (13.8 kV) após desarme.",
+        roomX: 650, roomY: 20, roomW: 280, roomH: 190,
+        doorPadX: 740, doorPadY: 200, padW: 100, padH: 26,
+        themeColor: "#fb923c",
+        decor: "transformer",
+        p1Options: [
+          { text: "Uniforme 100% algodão com proteção contra arco voltaico (ATPV)", correct: true },
+          { text: "Luvas de borracha isolante para média tensão com sobreluva", correct: true },
+          { text: "Alicate universal com fita isolante comum no cabo", correct: false },
+          { text: "Uso de anel de formatura metálico e relógio de pulso", correct: false }
+        ],
+        p2Options: [
+          { text: "Desenergização e bloqueio físico com cadeado e etiqueta (LOTO)", correct: true },
+          { text: "Teste de ausência de tensão seguido de aterramento temporário", correct: true },
+          { text: "Apenas desligar o disjuntor sem trancar o painel com cadeado", correct: false },
+          { text: "Liberar a tarefa sem ordem formal por urgência na produção", correct: false }
+        ],
+        p1Feedback: "Vestuário ATPV previne queimaduras e luvas ensaiadas impedem o choque elétrico.",
+        p2Feedback: "O bloqueio LOTO impede o religamento acidental fatal durante o serviço.",
+        normRule: "NR-10.5: Desenergização inclui seccionamento, bloqueio LOTO, teste de tensão e terra."
+      },
+      {
+        id: "machinery",
+        norm: "NR-12",
+        name: "PRENSAS & MÁQUINAS",
+        cleanName: "PRENSAS & MÁQUINAS",
+        desc: "Chapa de aço emperrada na matriz superior da prensa hidráulica com risco de esmagamento.",
+        roomX: 960, roomY: 20, roomW: 280, roomH: 190,
+        doorPadX: 1050, doorPadY: 200, padW: 100, padH: 26,
+        themeColor: "#ef4444",
+        decor: "press",
+        p1Options: [
+          { text: "Inserção de calço mecânico estrutural travando o martelo superior", correct: true },
+          { text: "Óculos de proteção com aba lateral e protetor concha auricular", correct: true },
+          { text: "Luvas de pano soltas perto de cilindros giratórios em teste", correct: false },
+          { text: "Apoiar o corpo entre as matrizes sem instalar suportes mecânicos", correct: false }
+        ],
+        p2Options: [
+          { text: "Alívio de pressão residual do circuito hidráulico e bloqueio de energia", correct: true },
+          { text: "Teste de desarme da cortina óptica e comando bimanual de segurança", correct: true },
+          { text: "Manter operador acionando o pedal durante o ajuste manual do colega", correct: false },
+          { text: "Burlar a chave de segurança da porta de acesso com fita para agilizar", correct: false }
+        ],
+        p1Feedback: "O calço mecânico impede a descida gravitacional do martelo da prensa.",
+        p2Feedback: "Circuitos hidráulicos guardam pressão residual crítica mesmo desligados.",
+        normRule: "NR-12.11: Exige retenção mecânica e eliminação de todas energias residuais."
+      },
+      {
+        id: "chemical",
+        norm: "NR-20",
+        name: "DEPÓSITO DE QUÍMICOS",
+        cleanName: "DEPÓSITO DE QUÍMICOS",
+        desc: "Transferência de solvente volátil inflamável (Tolueno) entre tambores industriais.",
+        roomX: 1270, roomY: 20, roomW: 280, roomH: 190,
+        doorPadX: 1360, doorPadY: 200, padW: 100, padH: 26,
+        themeColor: "#10b981",
+        decor: "barrels",
+        p1Options: [
+          { text: "Luvas de borracha nitrílica ou butílica impermeáveis a solventes", correct: true },
+          { text: "Respirador semifacial com cartucho químico para vapores orgânicos", correct: true },
+          { text: "Garrafas PET de água mineral para transportar o solvente", correct: false },
+          { text: "Calçado com cravos de metal capazes de gerar faísca no piso", correct: false }
+        ],
+        p2Options: [
+          { text: "Instalação do cabo de aterramento e equalização estática entre tambores", correct: true },
+          { text: "Disponibilização da FDS (FISPQ) e kit de contenção de derramamento", correct: true },
+          { text: "Fracionar produto em depósito fechado sem exaustão ou ventilação", correct: false },
+          { text: "Utilizar bomba plástica comum sem proteção antiestática", correct: false }
+        ],
+        p1Feedback: "O tolueno exige luvas apropriadas e filtro para vapores químicos orgânicos.",
+        p2Feedback: "O aterramento elimina a faísca estática gerada pelo fluxo de combustível.",
+        normRule: "NR-20 / NR-26: Controle de estática, sinalização e fichas de segurança obrigatórias."
+      }
+    ];
+
+    const secretRoom = {
+      x: 50,
+      y: 360,
+      w: 240,
+      h: 210,
+      doorGapX1: 165,
+      doorGapX2: 195
+    };
+
+    const weaponSpawns = [
+      { id: 1, x: 95, y: 445, w: 22, h: 14, taken: false, name: "Pistola P1" },
+      { id: 2, x: 215, y: 445, w: 22, h: 14, taken: false, name: "Pistola P2" }
+    ];
+
+    let bullets = [];
+
+    const canvas = document.getElementById('pixelCanvas');
+    const ctx = canvas.getContext('2d');
+    ctx.imageSmoothingEnabled = false;
+
+    const WORLD_WIDTH = 1590;
+    const WORLD_HEIGHT = 580;
+
+    let gameState = "MENU";
+    let clearedRooms = new Set();
+    let totalScore = 0;
+    let roundDuration = 35;
+    let currentRoom = null;
+    let timerCountdown = 35;
+    let timerInterval = null;
+
+    let activeShuffledP1 = [];
+    let activeShuffledP2 = [];
+    let p1Selected = new Set();
+    let p2Selected = new Set();
+
+    let cameraX = 0;
+    let cameraY = 0;
+
+    const player1 = {
+      x: 100, y: 260, w: 14, h: 20,
+      vx: 0, vy: 0, speed: 2.3,
+      color: "#0284c7", helmet: "#f97316",
+      dir: "right", animFrame: 0, animTick: 0,
+      hasWeapon: false,
+      hp: 10,
+      maxHp: 10,
+      shootCooldown: 0
+    };
+
+    const player2 = {
+      x: 130, y: 260, w: 14, h: 20,
+      vx: 0, vy: 0, speed: 2.3,
+      color: "#059669", helmet: "#f8fafc",
+      dir: "left", animFrame: 0, animTick: 0,
+      hasWeapon: false,
+      hp: 10,
+      maxHp: 10,
+      shootCooldown: 0
+    };
+
+    const keysDown = {};
+    window.addEventListener('keydown', (e) => {
+      keysDown[e.key] = true;
+      keysDown[e.key.toLowerCase()] = true;
+      if (e.code) keysDown[e.code] = true;
+
+      if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space'].includes(e.code) || 
+          ['arrowup', 'arrowdown', 'arrowleft', 'arrowright'].includes(e.key.toLowerCase())) {
+        e.preventDefault();
+      }
+
+      if (gameState === "LOBBY" && (e.key.toLowerCase() === 'f' || e.key.toLowerCase() === 'e')) {
+        firePlayerWeapon(player1, 1);
+      }
+
+      if (gameState === "LOBBY" && (e.code === 'Enter' || e.code === 'NumpadEnter' || e.key.toLowerCase() === 'l')) {
+        firePlayerWeapon(player2, 2);
+      }
+
+      if (gameState === "CHECKLIST") {
+        if (['1', '2', '3', '4'].includes(e.key)) {
+          toggleChecklistItem(1, parseInt(e.key, 10) - 1);
+        }
+        const p2Keys = { '7': 0, '8': 1, '9': 2, '0': 3 };
+        if (e.key in p2Keys) {
+          toggleChecklistItem(2, p2Keys[e.key]);
+        }
+        if (e.code === 'Space') {
+          submitChecklist();
+        }
+      }
+    });
+
+    window.addEventListener('keyup', (e) => {
+      keysDown[e.key] = false;
+      keysDown[e.key.toLowerCase()] = false;
+      if (e.code) keysDown[e.code] = false;
+    });
+
+    function shuffleArray(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function firePlayerWeapon(player, ownerId) {
+      if (!player.hasWeapon) return;
+      if (player.shootCooldown > 0) return;
+
+      player.shootCooldown = 18;
+      sound.playGunshot();
+
+      let bx = player.x + (player.w / 2);
+      let by = player.y + 11;
+      let bvx = 0;
+      let bvy = 0;
+      const bSpeed = 6.5;
+
+      if (player.dir === "right") { bvx = bSpeed; bx += 8; }
+      else if (player.dir === "left") { bvx = -bSpeed; bx -= 8; }
+      else if (player.dir === "up") { bvy = -bSpeed; by -= 8; }
+      else { bvy = bSpeed; by += 8; }
+
+      bullets.push({
+        x: bx,
+        y: by,
+        vx: bvx,
+        vy: bvy,
+        owner: ownerId,
+        life: 70
+      });
+    }
+
+    function updateBullets() {
+      for (let i = bullets.length - 1; i >= 0; i--) {
+        const b = bullets[i];
+        b.x += b.vx;
+        b.y += b.vy;
+        b.life--;
+
+        if (b.x < 0 || b.x > WORLD_WIDTH || b.y < 0 || b.y > WORLD_HEIGHT || b.life <= 0) {
+          bullets.splice(i, 1);
+          continue;
+        }
+
+        if (b.owner !== 1 && rectOverlap(b.x - 2, b.y - 2, 4, 4, player1.x, player1.y, player1.w, player1.h)) {
+          bullets.splice(i, 1);
+          damagePlayer(player1, 1);
+          continue;
+        }
+
+        if (b.owner !== 2 && rectOverlap(b.x - 2, b.y - 2, 4, 4, player2.x, player2.y, player2.w, player2.h)) {
+          bullets.splice(i, 1);
+          damagePlayer(player2, 2);
+          continue;
+        }
+      }
+    }
+
+    function damagePlayer(player, id) {
+      sound.playHit();
+      player.hp = Math.max(0, player.hp - 1);
+      updateHpUI();
+
+      if (player.hp <= 0) {
+        handleGameOverDeath(id);
+      }
+    }
+
+    function updateHpUI() {
+      const p1Elem = document.getElementById('hudP1Hp');
+      const p2Elem = document.getElementById('hudP2Hp');
+      p1Elem.textContent = `${player1.hp}/${player1.maxHp}`;
+      p2Elem.textContent = `${player2.hp}/${player2.maxHp}`;
+
+      p1Elem.style.color = player1.hp <= 3 ? '#f87171' : (player1.hp <= 6 ? '#facc15' : '#4ade80');
+      p2Elem.style.color = player2.hp <= 3 ? '#f87171' : (player2.hp <= 6 ? '#facc15' : '#4ade80');
+    }
+
+    function handleGameOverDeath(loserId) {
+      gameState = "DEAD";
+      sound.playSfxError();
+      const name = loserId === 1 ? "O Operador (P1)" : "O Fiscal (P2)";
+      document.getElementById('deathMessage').textContent = `${name} levou 10 tiros e tombou em serviço! As regras de segurança foram quebradas violentamente. Reiniciando o expediente...`;
+      document.getElementById('deathModal').classList.remove('hidden');
+    }
+
+    function restartGameFull() {
+      document.getElementById('deathModal').classList.add('hidden');
+      enterGameCorridor();
+    }
+
+    function updateLobby() {
+      if (gameState !== "LOBBY") return;
+
+      if (player1.shootCooldown > 0) player1.shootCooldown--;
+      if (player2.shootCooldown > 0) player2.shootCooldown--;
+
+      let p1Move = false;
+      player1.vx = 0; player1.vy = 0;
+      if (keysDown['w'] || keysDown['KeyW']) { player1.vy = -player1.speed; player1.dir = "up"; p1Move = true; }
+      if (keysDown['s'] || keysDown['KeyS']) { player1.vy = player1.speed; player1.dir = "down"; p1Move = true; }
+      if (keysDown['a'] || keysDown['KeyA']) { player1.vx = -player1.speed; player1.dir = "left"; p1Move = true; }
+      if (keysDown['d'] || keysDown['KeyD']) { player1.vx = player1.speed; player1.dir = "right"; p1Move = true; }
+
+      let p2Move = false;
+      player2.vx = 0; player2.vy = 0;
+
+      const p2Up = keysDown['ArrowUp'] || keysDown['arrowup'] || keysDown['Numpad8'];
+      const p2Down = keysDown['ArrowDown'] || keysDown['arrowdown'] || keysDown['Numpad2'];
+      const p2Left = keysDown['ArrowLeft'] || keysDown['arrowleft'] || keysDown['Numpad4'];
+      const p2Right = keysDown['ArrowRight'] || keysDown['arrowright'] || keysDown['Numpad6'];
+
+      if (p2Up) { player2.vy = -player2.speed; player2.dir = "up"; p2Move = true; }
+      if (p2Down) { player2.vy = player2.speed; player2.dir = "down"; p2Move = true; }
+      if (p2Left) { player2.vx = -player2.speed; player2.dir = "left"; p2Move = true; }
+      if (p2Right) { player2.vx = player2.speed; player2.dir = "right"; p2Move = true; }
+
+      const MAX_DIST_X = 500;
+      const MAX_DIST_Y = 270;
+
+      const distX1 = (player1.x + player1.vx) - player2.x;
+      if (Math.abs(distX1) > MAX_DIST_X && (distX1 * player1.vx > 0)) {
+        player1.vx = 0;
+      }
+      const distX2 = (player2.x + player2.vx) - player1.x;
+      if (Math.abs(distX2) > MAX_DIST_X && (distX2 * player2.vx > 0)) {
+        player2.vx = 0;
+      }
+
+      const distY1 = (player1.y + player1.vy) - player2.y;
+      if (Math.abs(distY1) > MAX_DIST_Y && (distY1 * player1.vy > 0)) {
+        player1.vy = 0;
+      }
+      const distY2 = (player2.y + player2.vy) - player1.y;
+      if (Math.abs(distY2) > MAX_DIST_Y && (distY2 * player2.vy > 0)) {
+        player2.vy = 0;
+      }
+
+      // Movimentação com colisão física mútua
+      moveWorker(player1, player2, p1Move);
+      moveWorker(player2, player1, p2Move);
+
+      const midX = (player1.x + player2.x) / 2;
+      cameraX = Math.max(0, Math.min(WORLD_WIDTH - 640, midX - 320));
+
+      const inSecretArea = (player1.y > 330 || player2.y > 330);
+      let targetCamY = 0;
+      if (inSecretArea) {
+        const midY = (player1.y + player2.y) / 2;
+        targetCamY = Math.max(0, Math.min(WORLD_HEIGHT - 360, midY - 180));
+      }
+
+      cameraY += (targetCamY - cameraY) * 0.14;
+      if (Math.abs(targetCamY - cameraY) < 0.5) cameraY = targetCamY;
+
+      checkWeaponPickup(player1);
+      checkWeaponPickup(player2);
+
+      updateBullets();
+      updateHudSector(midX);
+      checkRoomActivation();
+    }
+
+    // Função de movimento com verificação de limites do galpão e colisão com outro jogador
+    function moveWorker(ent, other, isMoving) {
+      const nextX = ent.x + ent.vx;
+      const nextY = ent.y + ent.vy;
+
+      const isCurrentlyOverlapping = other && rectOverlap(ent.x, ent.y, ent.w, ent.h, other.x, other.y, other.w, other.h);
+
+      // Colisão Vertical (Eixo Y) com o outro boneco
+      const collidesY = other && rectOverlap(ent.x, nextY, ent.w, ent.h, other.x, other.y, other.w, other.h);
+      const allowsY = !collidesY || (isCurrentlyOverlapping && Math.abs(nextY - other.y) > Math.abs(ent.y - other.y));
+
+      if (isPositionAllowed(ent.x, nextY, ent.w, ent.h) && allowsY) {
+        ent.y = nextY;
+      }
+
+      // Colisão Horizontal (Eixo X) com o outro boneco
+      const collidesX = other && rectOverlap(nextX, ent.y, ent.w, ent.h, other.x, other.y, other.w, other.h);
+      const allowsX = !collidesX || (isCurrentlyOverlapping && Math.abs(nextX - other.x) > Math.abs(ent.x - other.x));
+
+      if (isPositionAllowed(nextX, ent.y, ent.w, ent.h) && allowsX) {
+        ent.x = nextX;
+      }
+
+      if (ent.x < 15) ent.x = 15;
+      if (ent.x > WORLD_WIDTH - ent.w - 15) ent.x = WORLD_WIDTH - ent.w - 15;
+
+      if (isMoving) {
+        ent.animTick++;
+        if (ent.animTick > 7) {
+          ent.animFrame = (ent.animFrame + 1) % 4;
+          ent.animTick = 0;
+        }
+      } else {
+        ent.animFrame = 0;
+      }
+    }
+
+    function isPositionAllowed(x, y, w, h) {
+      if (y < 205) return false;
+
+      if (y <= 330) {
+        return true;
+      }
+
+      const inGapX = (x >= secretRoom.doorGapX1 - 2 && (x + w) <= secretRoom.doorGapX2 + 2);
+
+      if (y <= secretRoom.y + 10) {
+        return inGapX;
+      }
+
+      const inSecretRoomX = (x >= secretRoom.x + 8 && (x + w) <= secretRoom.x + secretRoom.w - 8);
+      const inSecretRoomY = (y + h <= secretRoom.y + secretRoom.h - 10);
+
+      if (!inSecretRoomX || !inSecretRoomY) return false;
+
+      if (y < secretRoom.y + 16 && !inGapX) {
+        return false;
+      }
+
+      return true;
+    }
+
+    function checkWeaponPickup(p) {
+      weaponSpawns.forEach(w => {
+        if (!w.taken && rectOverlap(p.x, p.y, p.w, p.h, w.x - 4, w.y - 4, w.w + 8, w.h + 8)) {
+          w.taken = true;
+          p.hasWeapon = true;
+          sound.playWeaponPickup();
+        }
+      });
+    }
+
+    function updateHudSector(x) {
+      const el = document.getElementById('hudSectorSign');
+      const midY = (player1.y + player2.y) / 2;
+      if (midY > 345) {
+        el.textContent = "SECRET: DEPÓSITO SUBTERRÂNEO";
+        el.style.color = "#f87171";
+      } else if (x < 320) {
+        el.textContent = "ALA 1: TELHADO & ALTURA [NR-35]";
+        el.style.color = "var(--pixel-yellow)";
+      } else if (x < 630) {
+        el.textContent = "ALA 2: ESPAÇO CONFINADO [NR-33]";
+        el.style.color = "var(--pixel-blue)";
+      } else if (x < 940) {
+        el.textContent = "ALA 3: SUBESTAÇÃO ELÉTRICA [NR-10]";
+        el.style.color = "var(--pixel-orange)";
+      } else if (x < 1250) {
+        el.textContent = "ALA 4: PRENSAS & MÁQUINAS [NR-12]";
+        el.style.color = "var(--pixel-red)";
+      } else {
+        el.textContent = "ALA 5: DEPÓSITO DE QUÍMICOS [NR-20]";
+        el.style.color = "var(--pixel-green)";
+      }
+    }
+
+    function checkRoomActivation() {
+      for (const room of safetyRooms) {
+        if (clearedRooms.has(room.id)) continue;
+
+        const p1In = rectOverlap(player1.x, player1.y, player1.w, player1.h, room.doorPadX, room.doorPadY, room.padW, room.padH);
+        const p2In = rectOverlap(player2.x, player2.y, player2.w, player2.h, room.doorPadX, room.doorPadY, room.padW, room.padH);
+
+        if (p1In && p2In) {
+          openRoomChallenge(room);
+          break;
+        }
+      }
+    }
+
+    function rectOverlap(x1, y1, w1, h1, x2, y2, w2, h2) {
+      return !(x1 + w1 < x2 || x1 > x2 + w2 || y1 + h1 < y2 || y1 > y2 + h2);
+    }
+
+    function renderLobby() {
+      ctx.save();
+      ctx.translate(-Math.round(cameraX), -Math.round(cameraY));
+
+      ctx.fillStyle = "#111827";
+      ctx.fillRect(0, 0, WORLD_WIDTH, WORLD_HEIGHT);
+
+      ctx.fillStyle = "#1e293b";
+      ctx.fillRect(0, 220, WORLD_WIDTH, 130);
+
+      drawZebraStrip(0, 220, WORLD_WIDTH, 8);
+
+      ctx.fillStyle = "#090d14";
+      ctx.fillRect(0, 346, WORLD_WIDTH, 14);
+
+      ctx.strokeStyle = "#273549";
+      ctx.lineWidth = 1;
+      for (let x = 0; x < WORLD_WIDTH; x += 32) {
+        ctx.beginPath(); ctx.moveTo(x, 228); ctx.lineTo(x, 346); ctx.stroke();
+      }
+
+      drawWetFloorSign(secretRoom.doorGapX1 - 28, 310);
+
+      ctx.fillStyle = "rgba(56, 189, 248, 0.35)";
+      ctx.beginPath();
+      ctx.ellipse(secretRoom.doorGapX1 + 14, 335, 16, 5, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = "rgba(250, 204, 21, 0.15)";
+      ctx.font = "8px 'Press Start 2P'";
+      for (let sx = 80; sx < WORLD_WIDTH; sx += 310) {
+        ctx.fillText("CORREDOR OPERACIONAL SESMT ➔", sx, 300);
+      }
+
+      drawSecretRoom();
+
+      safetyRooms.forEach(room => {
+        drawHorizontalRoom(room);
+      });
+
+      drawBullets();
+
+      drawPixelWorker(player1, 1);
+      drawPixelWorker(player2, 2);
+
+      ctx.restore();
+      drawScanlines();
+    }
+
+    function drawWetFloorSign(x, y) {
+      ctx.save();
+      ctx.fillStyle = "rgba(0, 0, 0, 0.4)";
+      ctx.beginPath();
+      ctx.ellipse(x + 10, y + 25, 12, 4, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = "#facc15";
+      ctx.beginPath();
+      ctx.moveTo(x + 10, y);
+      ctx.lineTo(x + 20, y + 24);
+      ctx.lineTo(x, y + 24);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = "#ca8a04";
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      ctx.fillStyle = "#000000";
+      ctx.fillRect(x + 8, y + 10, 4, 4);
+      ctx.fillRect(x + 6, y + 14, 8, 2);
+      ctx.fillRect(x + 5, y + 16, 4, 2);
+      ctx.fillRect(x + 11, y + 15, 3, 4);
+
+      ctx.fillStyle = "#ef4444";
+      ctx.fillRect(x + 7, y - 2, 6, 3);
+      ctx.restore();
+    }
+
+    function drawSecretRoom() {
+      const sr = secretRoom;
+      const isPlayerInSecret = (player1.y > 330 || player2.y > 330);
+
+      if (!isPlayerInSecret && cameraY <= 2) {
+        return;
+      }
+
+      ctx.fillStyle = "#0a0f18";
+      ctx.fillRect(sr.x, sr.y, sr.w, sr.h);
+
+      ctx.strokeStyle = "#475569";
+      ctx.lineWidth = 4;
+      ctx.strokeRect(sr.x, sr.y, sr.w, sr.h);
+
+      ctx.fillStyle = "#1e293b";
+      ctx.fillRect(sr.doorGapX1, sr.y - 4, (sr.doorGapX2 - sr.doorGapX1), 8);
+      ctx.fillStyle = "#94a3b8";
+      for (let ly = sr.y - 10; ly <= sr.y + 2; ly += 4) {
+        ctx.fillRect(sr.doorGapX1 + 2, ly, (sr.doorGapX2 - sr.doorGapX1) - 4, 1.5);
+      }
+
+      ctx.fillStyle = "#1e293b";
+      ctx.fillRect(sr.x + 20, sr.y + 20, 40, 16);
+      ctx.fillStyle = "#000";
+      for (let i = sr.x + 24; i < sr.x + 58; i += 6) {
+        ctx.fillRect(i, sr.y + 22, 2, 12);
+      }
+
+      ctx.fillStyle = "rgba(248, 113, 113, 0.45)";
+      ctx.font = "bold 13px 'VT323', monospace";
+      ctx.fillText("DEPÓSITO CLANDESTINO • ARMARIA DE SEGURANÇA", sr.x + 15, sr.y + 35);
+      ctx.fillStyle = "rgba(255, 255, 255, 0.3)";
+      ctx.font = "10px 'VT323', monospace";
+      ctx.fillText("COLETA AUTOMÁTICA AO APROXIMAR • DISPARO: P1[F] | P2[ENTER]", sr.x + 15, sr.y + 50);
+
+      weaponSpawns.forEach((w, idx) => {
+        ctx.fillStyle = "#334155";
+        ctx.fillRect(w.x - 8, w.y + 4, 38, 18);
+        ctx.strokeStyle = "#64748b";
+        ctx.lineWidth = 2;
+        ctx.strokeRect(w.x - 8, w.y + 4, 38, 18);
+
+        ctx.fillStyle = "#1e293b";
+        ctx.fillRect(w.x - 4, w.y + 6, 30, 14);
+
+        if (!w.taken) {
+          ctx.fillStyle = "#000000";
+          ctx.fillRect(w.x, w.y + 8, 14, 5);
+          ctx.fillRect(w.x + 8, w.y + 11, 4, 7);
+          ctx.fillStyle = "#94a3b8";
+          ctx.fillRect(w.x + 2, w.y + 9, 8, 2);
+
+          const pulse = (Math.sin(Date.now() / 150) + 1) / 2;
+          ctx.fillStyle = `rgba(250, 204, 21, ${0.4 * pulse})`;
+          ctx.beginPath();
+          ctx.arc(w.x + 8, w.y + 11, 16, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.fillStyle = "#facc15";
+          ctx.font = "9px 'VT323', monospace";
+          ctx.fillText(`ARMA ${idx + 1}`, w.x - 2, w.y);
+        } else {
+          ctx.fillStyle = "#64748b";
+          ctx.font = "9px 'VT323', monospace";
+          ctx.fillText("COLETADA", w.x - 4, w.y);
+        }
+      });
+    }
+
+    function drawBullets() {
+      ctx.fillStyle = "#facc15";
+      bullets.forEach(b => {
+        ctx.fillRect(b.x - 2, b.y - 2, 4, 4);
+        ctx.fillStyle = "#fb923c";
+        ctx.fillRect(b.x - 1, b.y - 1, 2, 2);
+      });
+    }
+
+    function drawZebraStrip(x, y, w, h) {
+      ctx.fillStyle = "#000000";
+      ctx.fillRect(x, y, w, h);
+      ctx.fillStyle = "#facc15";
+      for (let i = x; i < x + w; i += 16) {
+        ctx.beginPath();
+        ctx.moveTo(i, y + h);
+        ctx.lineTo(i + 8, y + h);
+        ctx.lineTo(i + 14, y);
+        ctx.lineTo(i + 6, y);
+        ctx.fill();
+      }
+    }
+
+    function drawHorizontalRoom(room) {
+      const isCleared = clearedRooms.has(room.id);
+
+      ctx.fillStyle = isCleared ? "#064e3b" : "#0d131f";
+      ctx.fillRect(room.roomX, room.roomY, room.roomW, room.roomH);
+
+      ctx.strokeStyle = isCleared ? "#10b981" : "#334155";
+      ctx.lineWidth = 3;
+      ctx.strokeRect(room.roomX, room.roomY, room.roomW, room.roomH);
+
+      const bannerX = room.roomX + 8;
+      const bannerY = room.roomY + 7;
+      const bannerW = room.roomW - 16;
+      const bannerH = 26;
+
+      ctx.fillStyle = isCleared ? "#064e3b" : "#0f172a";
+      ctx.fillRect(bannerX, bannerY, bannerW, bannerH);
+      ctx.strokeStyle = isCleared ? "#10b981" : room.themeColor;
+      ctx.lineWidth = 2;
+      ctx.strokeRect(bannerX, bannerY, bannerW, bannerH);
+
+      const normTag = room.norm;
+      const badgeW = 60;
+      const badgeH = 18;
+      const badgeX = bannerX + 4;
+      const badgeY = bannerY + 4;
+
+      ctx.fillStyle = isCleared ? "#10b981" : room.themeColor;
+      ctx.fillRect(badgeX, badgeY, badgeW, badgeH);
+
+      ctx.save();
+      ctx.fillStyle = "#090d14";
+      ctx.font = "bold 15px 'VT323', monospace";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(normTag, badgeX + (badgeW / 2), badgeY + (badgeH / 2) + 1);
+
+      const titleText = isCleared ? "SETOR LIBERADO COM SUCESSO" : (room.cleanName || room.name);
+      ctx.textAlign = "left";
+      ctx.fillStyle = isCleared ? "#a7f3d0" : "#ffffff";
+      ctx.font = "bold 17px 'VT323', monospace";
+      ctx.fillText(titleText, badgeX + badgeW + 8, bannerY + (bannerH / 2) + 1);
+      ctx.restore();
+
+      drawThemeDecorations(room);
+
+      ctx.fillStyle = isCleared ? "#064e3b" : "#1e293b";
+      ctx.fillRect(room.doorPadX - 4, room.roomY + room.roomH - 3, room.padW + 8, 6);
+
+      ctx.fillStyle = isCleared ? "rgba(16, 185, 129, 0.4)" : "rgba(250, 204, 21, 0.35)";
+      ctx.fillRect(room.doorPadX, room.doorPadY, room.padW, room.padH);
+      ctx.strokeStyle = isCleared ? "#10b981" : "#facc15";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(room.doorPadX, room.doorPadY, room.padW, room.padH);
+
+      ctx.save();
+      ctx.fillStyle = isCleared ? "#a7f3d0" : "#fef08a";
+      ctx.font = "bold 14px 'VT323', monospace";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(isCleared ? "✔ LIBERADO" : "INICIAR TAREFA", room.doorPadX + (room.padW / 2), room.doorPadY + (room.padH / 2) + 1);
+      ctx.restore();
+    }
+
+    function drawIndustrialSign(x, y, w, h, headerBg, headerColor, headerText, lines, borderColor) {
+      ctx.save();
+      ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
+      ctx.fillRect(x + 2, y + 2, w, h);
+      ctx.fillStyle = "#0c1322";
+      ctx.fillRect(x, y, w, h);
+      ctx.strokeStyle = borderColor;
+      ctx.lineWidth = 2;
+      ctx.strokeRect(x, y, w, h);
+
+      ctx.fillStyle = "#94a3b8";
+      ctx.fillRect(x + 2, y + 2, 2, 2);
+      ctx.fillRect(x + w - 4, y + 2, 2, 2);
+      ctx.fillRect(x + 2, y + h - 4, 2, 2);
+      ctx.fillRect(x + w - 4, y + h - 4, 2, 2);
+
+      const headerH = 15;
+      ctx.fillStyle = headerBg;
+      ctx.fillRect(x, y, w, headerH);
+
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillStyle = headerColor;
+      ctx.font = "bold 12px 'VT323', monospace";
+      ctx.fillText(headerText, x + (w / 2), y + (headerH / 2) + 1);
+
+      ctx.textAlign = "left";
+      ctx.textBaseline = "top";
+      const startY = y + headerH + 4;
+      const lineSpacing = 11;
+
+      lines.forEach((line, idx) => {
+        ctx.fillStyle = line.color || "#ffffff";
+        ctx.font = line.font || "bold 12px 'VT323', monospace";
+        ctx.fillText(line.text, x + 6, startY + (idx * lineSpacing));
+      });
+      ctx.restore();
+    }
+
+    function drawPixelArtNR35(rx, ry) {
+      ctx.fillStyle = "#0369a1";
+      ctx.fillRect(rx + 12, ry + 38, 122, 142);
+      ctx.fillStyle = "#38bdf8";
+      ctx.fillRect(rx + 12, ry + 44, 122, 50);
+      ctx.fillStyle = "#bae6fd";
+      ctx.fillRect(rx + 12, ry + 40, 80, 24);
+
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(rx + 20, ry + 56, 32, 6);
+      ctx.fillRect(rx + 30, ry + 52, 20, 12);
+      ctx.fillRect(rx + 76, ry + 66, 36, 6);
+
+      ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
+      ctx.beginPath();
+      ctx.arc(rx + 118, ry + 42, 24, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = "#475569";
+      ctx.fillRect(rx + 96, ry + 38, 6, 142);
+      ctx.fillRect(rx + 122, ry + 38, 8, 142);
+      ctx.fillStyle = "#64748b";
+      ctx.fillRect(rx + 98, ry + 38, 2, 142);
+      ctx.fillRect(rx + 124, ry + 38, 3, 142);
+
+      for (let st = ry + 44; st < ry + 180; st += 12) {
+        ctx.fillStyle = "#94a3b8";
+        ctx.fillRect(rx + 102, st, 20, 3);
+      }
+
+      ctx.strokeStyle = "#cbd5e1";
+      ctx.lineWidth = 2;
+      for (let g = ry + 50; g < ry + 180; g += 26) {
+        ctx.beginPath();
+        ctx.arc(rx + 110, g, 20, Math.PI * 0.9, Math.PI * 1.9, false);
+        ctx.stroke();
+      }
+
+      ctx.strokeStyle = "#0f172a";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(rx + 124, ry + 40);
+      ctx.lineTo(rx + 20, ry + 160);
+      ctx.stroke();
+
+      ctx.strokeStyle = "#334155";
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(rx + 122, ry + 40);
+      ctx.lineTo(rx + 16, ry + 162);
+      ctx.stroke();
+
+      const px = rx + 48;
+      const py = ry + 104;
+
+      ctx.fillStyle = "#1e293b";
+      ctx.fillRect(px - 18, py + 12, 14, 8);
+      ctx.fillRect(px - 28, py + 18, 12, 8);
+      ctx.fillStyle = "#a3e635";
+      ctx.fillRect(px - 26, py + 18, 5, 8);
+      ctx.fillStyle = "#090d14";
+      ctx.fillRect(px - 34, py + 22, 8, 8);
+      ctx.fillRect(px - 36, py + 26, 12, 5);
+
+      ctx.fillStyle = "#0f172a";
+      ctx.fillRect(px - 6, py + 16, 12, 8);
+      ctx.fillRect(px - 14, py + 24, 10, 8);
+      ctx.fillStyle = "#bef264";
+      ctx.fillRect(px - 12, py + 24, 5, 8);
+      ctx.fillStyle = "#090d14";
+      ctx.fillRect(px - 18, py + 30, 8, 8);
+      ctx.fillRect(px - 20, py + 34, 12, 5);
+
+      ctx.fillStyle = "#0284c7";
+      ctx.fillRect(px - 8, py + 6, 14, 8);
+      ctx.fillStyle = "#facc15";
+      ctx.fillRect(px - 2, py + 6, 4, 8);
+
+      ctx.fillStyle = "#84cc16";
+      ctx.fillRect(px - 6, py - 10, 18, 18);
+      ctx.fillStyle = "#65a30d";
+      ctx.fillRect(px - 4, py - 4, 16, 8);
+      ctx.fillStyle = "#f8fafc";
+      ctx.fillRect(px - 2, py - 10, 3, 14);
+      ctx.fillStyle = "#0f172a";
+      ctx.fillRect(px - 4, py - 2, 14, 3);
+
+      ctx.fillStyle = "#84cc16";
+      ctx.fillRect(px + 6, py - 18, 8, 12);
+      ctx.fillStyle = "#475569";
+      ctx.fillRect(px + 10, py - 22, 6, 6);
+
+      ctx.fillStyle = "#65a30d";
+      ctx.fillRect(px - 12, py - 8, 8, 10);
+      ctx.fillStyle = "#475569";
+      ctx.fillRect(px - 14, py, 6, 6);
+
+      ctx.fillStyle = "#facc15";
+      ctx.fillRect(px + 4, py - 4, 4, 5);
+      ctx.fillStyle = "#cbd5e1";
+      ctx.fillRect(px + 6, py - 2, 3, 4);
+
+      ctx.fillStyle = "#fed7aa";
+      ctx.fillRect(px + 2, py - 16, 8, 8);
+      ctx.fillStyle = "#0284c7";
+      ctx.fillRect(px + 3, py - 14, 8, 4);
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(px + 1, py - 22, 12, 7);
+      ctx.fillStyle = "#94a3b8";
+      ctx.fillRect(px - 1, py - 17, 14, 3);
+      ctx.fillStyle = "#0f172a";
+      ctx.fillRect(px + 2, py - 13, 2, 5);
+    }
+
+    function drawPixelArtNR33(rx, ry) {
+      const cx = rx + 74;
+      const cy = ry + 110;
+
+      ctx.fillStyle = "#b45309";
+      ctx.beginPath();
+      ctx.arc(cx, cy, 50, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = "#f59e0b";
+      ctx.beginPath();
+      ctx.arc(cx, cy, 47, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = "#78350f";
+      for (let a = 0; a < Math.PI * 2; a += Math.PI / 6) {
+        const px = cx + Math.cos(a) * 42;
+        const py = cy + Math.sin(a) * 42;
+        ctx.fillRect(px - 1.5, py - 1.5, 3, 3);
+      }
+
+      ctx.fillStyle = "#1e1b18";
+      ctx.beginPath();
+      ctx.arc(cx, cy, 38, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = "#0f172a";
+      ctx.beginPath();
+      ctx.arc(cx, cy, 32, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = "#facc15";
+      ctx.fillRect(cx - 21, cy - 14, 8, 18);
+      ctx.fillStyle = "#ca8a04";
+      ctx.fillRect(cx - 19, cy - 16, 4, 3);
+
+      ctx.fillStyle = "#d97706";
+      ctx.fillRect(cx - 23, cy - 22, 6, 12);
+      ctx.fillRect(cx - 26, cy - 27, 8, 7);
+      ctx.fillStyle = "#64748b";
+      ctx.fillRect(cx - 28, cy - 31, 10, 7);
+      ctx.fillStyle = "#94a3b8";
+      ctx.fillRect(cx - 28, cy - 31, 4, 4);
+
+      ctx.fillStyle = "#f59e0b";
+      ctx.fillRect(cx - 15, cy - 14, 18, 16);
+      ctx.fillStyle = "#d97706";
+      ctx.fillRect(cx - 13, cy - 2, 16, 6);
+
+      ctx.fillStyle = "#334155";
+      ctx.fillRect(cx - 13, cy - 12, 3, 16);
+      ctx.fillRect(cx, cy - 12, 3, 16);
+      ctx.fillRect(cx - 15, cy - 2, 18, 3);
+
+      ctx.fillStyle = "#f59e0b";
+      ctx.fillRect(cx + 3, cy - 14, 13, 6);
+      ctx.fillRect(cx + 12, cy - 20, 6, 9);
+      ctx.fillStyle = "#64748b";
+      ctx.fillRect(cx + 11, cy - 28, 9, 10);
+      ctx.fillStyle = "#94a3b8";
+      ctx.fillRect(cx + 17, cy - 26, 4, 6);
+
+      ctx.fillStyle = "#b45309";
+      ctx.fillRect(cx - 15, cy + 4, 14, 12);
+      ctx.fillStyle = "#f59e0b";
+      ctx.fillRect(cx - 11, cy + 8, 20, 9);
+      ctx.fillStyle = "#d97706";
+      ctx.fillRect(cx + 3, cy + 13, 10, 8);
+
+      ctx.fillStyle = "#1e293b";
+      ctx.fillRect(cx - 17, cy + 17, 10, 6);
+      ctx.fillRect(cx + 1, cy + 20, 14, 6);
+      ctx.fillStyle = "#94a3b8";
+      ctx.fillRect(cx - 17, cy + 22, 10, 2);
+      ctx.fillRect(cx + 1, cy + 24, 14, 2);
+
+      ctx.fillStyle = "#fed7aa";
+      ctx.fillRect(cx - 4, cy - 21, 8, 8);
+
+      ctx.fillStyle = "#ea580c";
+      ctx.fillRect(cx - 7, cy - 29, 14, 6);
+      ctx.fillStyle = "#c2410c";
+      ctx.fillRect(cx - 9, cy - 25, 18, 3);
+      ctx.fillStyle = "#fef08a";
+      ctx.fillRect(cx + 5, cy - 29, 4, 4);
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(cx + 7, cy - 28, 2, 2);
+
+      ctx.fillStyle = "#334155";
+      ctx.fillRect(cx - 2, cy - 23, 10, 11);
+      ctx.fillStyle = "#67e8f9";
+      ctx.fillRect(cx + 2, cy - 22, 5, 4);
+      ctx.fillStyle = "#0f172a";
+      ctx.fillRect(cx, cy - 13, 5, 4);
+      ctx.fillRect(cx - 5, cy - 10, 6, 3);
+      ctx.fillRect(cx - 11, cy - 10, 6, 3);
+    }
+
+    function drawPixelArtNR10(rx, ry) {
+      ctx.fillStyle = "#1e293b";
+      ctx.fillRect(rx + 12, ry + 38, 122, 142);
+      ctx.fillStyle = "#334155";
+      ctx.fillRect(rx + 12, ry + 38, 122, 10);
+
+      ctx.fillStyle = "#cbd5e1";
+      ctx.fillRect(rx + 16, ry + 42, 48, 134);
+      ctx.strokeStyle = "#475569";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(rx + 16, ry + 42, 48, 134);
+
+      ctx.fillStyle = "#f8fafc";
+      ctx.fillRect(rx + 20, ry + 48, 18, 12);
+      ctx.fillStyle = "#334155";
+      ctx.fillRect(rx + 22, ry + 44, 2, 5);
+      ctx.fillRect(rx + 34, ry + 44, 2, 5);
+
+      ctx.fillStyle = "#94a3b8";
+      ctx.fillRect(rx + 20, ry + 64, 40, 3);
+      ctx.fillRect(rx + 20, ry + 86, 40, 3);
+
+      const cbColors = ["#ffffff", "#0284c7", "#ef4444", "#ffffff", "#1e293b", "#ef4444"];
+      cbColors.forEach((col, i) => {
+        ctx.fillStyle = col;
+        ctx.fillRect(rx + 22 + (i * 6), ry + 68, 5, 14);
+        ctx.fillStyle = "#000";
+        ctx.fillRect(rx + 23 + (i * 6), ry + 73, 3, 4);
+      });
+
+      ctx.fillStyle = "#090d14";
+      ctx.fillRect(rx + 22, ry + 94, 22, 10);
+      ctx.fillStyle = "#ef4444";
+      ctx.font = "7px 'Press Start 2P'";
+      ctx.fillText("220", rx + 24, ry + 102);
+
+      ctx.strokeStyle = "#0f172a";
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.arc(rx + 38, ry + 138, 16, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.strokeStyle = "#facc15";
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.arc(rx + 38, ry + 138, 11, 0, Math.PI * 2);
+      ctx.stroke();
+
+      const ex = rx + 82;
+      const ey = ry + 92;
+
+      ctx.fillStyle = "#64748b";
+      ctx.fillRect(ex - 8, ey + 4, 28, 44);
+      ctx.fillStyle = "#475569";
+      ctx.fillRect(ex - 6, ey + 24, 26, 24);
+
+      ctx.fillStyle = "#64748b";
+      ctx.fillRect(ex - 16, ey + 8, 10, 16);
+      ctx.fillStyle = "#0284c7";
+      ctx.fillRect(ex - 22, ey + 22, 12, 4);
+      ctx.fillStyle = "#0f172a";
+      ctx.fillRect(ex - 24, ey + 26, 12, 10);
+
+      ctx.fillStyle = "#dc2626";
+      ctx.fillRect(ex - 30, ey + 18, 14, 24);
+      ctx.fillStyle = "#ef4444";
+      ctx.fillRect(ex - 28, ey + 20, 10, 8);
+      ctx.fillStyle = "#090d14";
+      ctx.fillRect(ex - 27, ey + 22, 8, 4);
+      ctx.fillStyle = "#facc15";
+      ctx.fillRect(ex - 25, ey + 32, 4, 4);
+
+      ctx.fillStyle = "#64748b";
+      ctx.fillRect(ex - 4, ey + 6, 12, 8);
+      ctx.fillRect(ex - 14, ey + 8, 12, 7);
+      ctx.fillStyle = "#0284c7";
+      ctx.fillRect(ex - 18, ey + 9, 4, 6);
+      ctx.fillStyle = "#0f172a";
+      ctx.fillRect(ex - 26, ey + 9, 8, 6);
+
+      ctx.fillStyle = "#dc2626";
+      ctx.fillRect(ex - 38, ey + 11, 12, 3);
+      ctx.fillStyle = "#cbd5e1";
+      ctx.fillRect(ex - 44, ey + 12, 6, 1);
+
+      ctx.strokeStyle = "#dc2626";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(ex - 26, ey + 40);
+      ctx.bezierCurveTo(ex - 36, ey + 44, ex - 42, ey + 24, ex - 34, ey + 13);
+      ctx.stroke();
+
+      ctx.fillStyle = "#fed7aa";
+      ctx.fillRect(ex - 2, ey - 14, 18, 18);
+      ctx.fillStyle = "#78350f";
+      ctx.fillRect(ex - 4, ey - 4, 12, 8);
+      ctx.fillStyle = "#0f172a";
+      ctx.fillRect(ex - 6, ey - 12, 12, 5);
+      ctx.fillStyle = "#38bdf8";
+      ctx.fillRect(ex - 5, ey - 11, 8, 3);
+
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(ex - 6, ey - 24, 24, 11);
+      ctx.fillStyle = "#cbd5e1";
+      ctx.fillRect(ex - 10, ey - 15, 28, 4);
+    }
+
+    function drawPixelArtNR12(rx, ry) {
+      ctx.fillStyle = "#1e293b";
+      ctx.fillRect(rx + 12, ry + 38, 122, 142);
+      ctx.fillStyle = "#1d4ed8";
+      ctx.fillRect(rx + 16, ry + 38, 8, 142);
+      ctx.fillRect(rx + 118, ry + 38, 8, 142);
+      ctx.fillRect(rx + 16, ry + 62, 110, 6);
+
+      ctx.fillStyle = "#ca8a04";
+      ctx.fillRect(rx + 62, ry + 42, 28, 12);
+      ctx.fillStyle = "#eab308";
+      ctx.fillRect(rx + 66, ry + 54, 20, 24);
+      ctx.fillStyle = "#fde047";
+      ctx.fillRect(rx + 68, ry + 56, 6, 20);
+      ctx.fillStyle = "#475569";
+      ctx.fillRect(rx + 74, ry + 78, 5, 14);
+
+      ctx.fillStyle = "#334155";
+      ctx.fillRect(rx + 20, ry + 124, 106, 26);
+      ctx.fillStyle = "#facc15";
+      ctx.fillRect(rx + 24, ry + 118, 98, 4);
+      ctx.fillRect(rx + 24, ry + 118, 4, 24);
+      ctx.fillRect(rx + 118, ry + 118, 4, 24);
+
+      const w1x = rx + 36;
+      const w1y = ry + 104;
+
+      ctx.fillStyle = "#1e40af";
+      ctx.fillRect(w1x - 5, w1y + 24, 6, 24);
+      ctx.fillRect(w1x + 2, w1y + 24, 6, 24);
+      ctx.fillStyle = "#090d14";
+      ctx.fillRect(w1x - 6, w1y + 44, 7, 5);
+      ctx.fillRect(w1x + 2, w1y + 44, 7, 5);
+
+      ctx.fillStyle = "#2563eb";
+      ctx.fillRect(w1x - 7, w1y, 16, 24);
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(w1x - 7, w1y + 8, 16, 3);
+
+      ctx.fillStyle = "#1d4ed8";
+      ctx.fillRect(w1x + 7, w1y + 2, 7, 10);
+      ctx.fillStyle = "#fed7aa";
+      ctx.fillRect(w1x + 12, w1y - 2, 4, 5);
+      ctx.fillStyle = "#dc2626";
+      ctx.fillRect(w1x + 14, w1y - 6, 5, 8);
+      ctx.fillStyle = "#000000";
+      ctx.fillRect(w1x + 17, w1y - 12, 1, 6);
+
+      ctx.fillStyle = "#451a03";
+      ctx.fillRect(w1x - 5, w1y - 10, 11, 10);
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(w1x - 6, w1y - 18, 13, 9);
+      ctx.fillStyle = "#cbd5e1";
+      ctx.fillRect(w1x - 8, w1y - 11, 16, 3);
+
+      const w2x = rx + 98;
+      const w2y = ry + 94;
+
+      ctx.fillStyle = "#1e40af";
+      ctx.fillRect(w2x - 5, w2y + 32, 6, 24);
+      ctx.fillRect(w2x + 3, w2y + 32, 6, 24);
+      ctx.fillStyle = "#090d14";
+      ctx.fillRect(w2x - 6, w2y + 52, 7, 5);
+      ctx.fillRect(w2x + 3, w2y + 52, 7, 5);
+
+      ctx.fillStyle = "#2563eb";
+      ctx.fillRect(w2x - 7, w2y + 8, 16, 24);
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(w2x - 7, w2y + 16, 16, 3);
+
+      ctx.fillStyle = "#1d4ed8";
+      ctx.fillRect(w2x - 8, w2y - 4, 6, 14);
+      ctx.fillStyle = "#2563eb";
+      ctx.fillRect(w2x - 12, w2y - 16, 6, 14);
+      ctx.fillStyle = "#fed7aa";
+      ctx.fillRect(w2x - 14, w2y - 20, 5, 5);
+
+      ctx.fillStyle = "#fed7aa";
+      ctx.fillRect(w2x - 4, w2y - 3, 10, 11);
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(w2x - 6, w2y - 11, 14, 9);
+      ctx.fillStyle = "#cbd5e1";
+      ctx.fillRect(w2x - 8, w2y - 4, 16, 3);
+    }
+
+    function drawPixelArtNR20(rx, ry) {
+      ctx.fillStyle = "#1e293b";
+      ctx.fillRect(rx + 12, ry + 38, 122, 142);
+      ctx.fillStyle = "#334155";
+      ctx.fillRect(rx + 12, ry + 38, 122, 8);
+
+      ctx.fillStyle = "#64748b";
+      ctx.fillRect(rx + 16, ry + 52, 46, 100);
+      ctx.fillStyle = "#94a3b8";
+      ctx.fillRect(rx + 22, ry + 52, 28, 100);
+      ctx.fillStyle = "#cbd5e1";
+      ctx.fillRect(rx + 26, ry + 52, 8, 100);
+
+      ctx.beginPath();
+      ctx.arc(rx + 39, ry + 52, 23, Math.PI, 0, false);
+      ctx.fillStyle = "#64748b";
+      ctx.fill();
+
+      ctx.fillStyle = "#475569";
+      ctx.fillRect(rx + 37, ry + 24, 4, 8);
+      ctx.fillStyle = "#dc2626";
+      ctx.fillRect(rx + 35, ry + 22, 8, 3);
+
+      ctx.fillStyle = "#334155";
+      ctx.fillRect(rx + 96, ry + 64, 30, 90);
+      ctx.fillStyle = "#475569";
+      ctx.fillRect(rx + 102, ry + 64, 14, 90);
+      ctx.beginPath();
+      ctx.arc(rx + 111, ry + 64, 15, Math.PI, 0, false);
+      ctx.fillStyle = "#334155";
+      ctx.fill();
+      ctx.fillStyle = "#ca8a04";
+      ctx.fillRect(rx + 109, ry + 44, 4, 6);
+
+      ctx.fillStyle = "#ef4444";
+      ctx.beginPath();
+      ctx.moveTo(rx + 39, ry + 82);
+      ctx.lineTo(rx + 47, ry + 90);
+      ctx.lineTo(rx + 39, ry + 98);
+      ctx.lineTo(rx + 31, ry + 90);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.fillStyle = "#fef08a";
+      ctx.fillRect(rx + 38, ry + 88, 3, 5);
+
+      const ix = rx + 68;
+      const iy = ry + 92;
+
+      ctx.fillStyle = "#cbd5e1";
+      ctx.fillRect(ix - 12, iy + 6, 26, 42);
+
+      ctx.fillStyle = "#84cc16";
+      ctx.fillRect(ix - 12, iy + 8, 26, 34);
+      ctx.fillStyle = "#a3e635";
+      ctx.fillRect(ix - 8, iy + 8, 18, 34);
+
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(ix - 12, iy + 22, 26, 4);
+      ctx.fillRect(ix - 12, iy + 34, 26, 4);
+
+      ctx.fillStyle = "#cbd5e1";
+      ctx.fillRect(ix - 16, iy + 14, 8, 16);
+      ctx.fillRect(ix + 10, iy + 14, 8, 16);
+
+      ctx.fillStyle = "#0f172a";
+      ctx.fillRect(ix - 10, iy + 26, 7, 8);
+      ctx.fillRect(ix + 5, iy + 26, 7, 8);
+
+      ctx.fillStyle = "#020617";
+      ctx.fillRect(ix - 8, iy + 20, 18, 22);
+      ctx.fillStyle = "#38bdf8";
+      ctx.fillRect(ix - 6, iy + 22, 14, 18);
+
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(ix - 4, iy + 24, 10, 2);
+      ctx.fillRect(ix - 4, iy + 28, 8, 2);
+      ctx.fillRect(ix - 4, iy + 32, 10, 2);
+
+      ctx.fillStyle = "#fed7aa";
+      ctx.fillRect(ix - 6, iy - 12, 14, 18);
+
+      ctx.fillStyle = "#0f172a";
+      ctx.fillRect(ix - 8, iy - 8, 18, 5);
+      ctx.fillStyle = "#67e8f9";
+      ctx.fillRect(ix - 7, iy - 7, 14, 3);
+
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(ix - 9, iy - 22, 20, 11);
+      ctx.fillStyle = "#cbd5e1";
+      ctx.fillRect(ix - 12, iy - 13, 26, 4);
+    }
+
+    function drawThemeDecorations(room) {
+      const rx = room.roomX;
+      const ry = room.roomY;
+
+      if (room.decor === "scaffold") {
+        drawPixelArtNR35(rx, ry);
+        drawIndustrialSign(
+          rx + 138, ry + 118, 134, 58,
+          "#facc15", "#000000", "⚠ TRABALHO EM ALTURA",
+          [
+            { text: "• PISO ELEVADO: 8 METROS", color: "#facc15" },
+            { text: "• TALABARTE DUPLO EM Y", color: "#ffffff" },
+            { text: "• LINHA DE VIDA OBRIG.", color: "#38bdf8" }
+          ],
+          "#facc15"
+        );
+      } else if (room.decor === "manhole") {
+        drawPixelArtNR33(rx, ry);
+        drawIndustrialSign(
+          rx + 138, ry + 118, 134, 58,
+          "#38bdf8", "#000000", "⚠ ESPAÇO CONFINADO",
+          [
+            { text: "• MEDIÇÃO DE H2S / CO", color: "#38bdf8" },
+            { text: "• EMISSÃO FORMAL DE PET", color: "#ffffff" },
+            { text: "• VIGIA EXTERNO RESGATE", color: "#facc15" }
+          ],
+          "#38bdf8"
+        );
+      } else if (room.decor === "transformer") {
+        drawPixelArtNR10(rx, ry);
+        drawIndustrialSign(
+          rx + 138, ry + 118, 134, 58,
+          "#ea580c", "#ffffff", "⚠ PERIGO: ALTA TENSÃO",
+          [
+            { text: "• BARRAMENTO 13.800V", color: "#facc15" },
+            { text: "• BLOQUEIO LOTO OBRIG.", color: "#ffffff" },
+            { text: "• TESTE DE TENSÃO/TERRA", color: "#93c5fd" }
+          ],
+          "#fb923c"
+        );
+      } else if (room.decor === "press") {
+        drawPixelArtNR12(rx, ry);
+        drawIndustrialSign(
+          rx + 138, ry + 118, 134, 58,
+          "#dc2626", "#ffffff", "⚠ RISCO DE PRENSAGEM",
+          [
+            { text: "• CORTINA ÓPTICA ATIVA", color: "#facc15" },
+            { text: "• PROIBIDO BURLAR TRAVAS", color: "#ffffff" },
+            { text: "• CALÇO MECÂNICO OBRIG.", color: "#f87171" }
+          ],
+          "#f87171"
+        );
+      } else if (room.decor === "barrels") {
+        drawPixelArtNR20(rx, ry);
+        drawIndustrialSign(
+          rx + 138, ry + 118, 134, 58,
+          "#10b981", "#000000", "⚠ LÍQUIDOS INFLAMÁVEIS",
+          [
+            { text: "• PRODUTOS VOLÁTEIS", color: "#f87171" },
+            { text: "• FDS/FISPQ OBRIGATÓRIA", color: "#ffffff" },
+            { text: "• ATERRAMENTO ESTÁTICO", color: "#4ade80" }
+          ],
+          "#10b981"
+        );
+      }
+    }
+
+    function drawPixelWorker(p, id) {
+      ctx.save();
+      ctx.translate(Math.round(p.x), Math.round(p.y));
+
+      const bob = (p.animFrame % 2 === 1) ? -1 : 0;
+
+      ctx.fillStyle = "rgba(0, 0, 0, 0.45)";
+      ctx.beginPath();
+      ctx.ellipse(7, 20, 7, 3, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = "#1e293b";
+      if (p.animFrame === 1) {
+        ctx.fillRect(2, 14, 4, 6);
+        ctx.fillRect(8, 13, 4, 5);
+      } else if (p.animFrame === 3) {
+        ctx.fillRect(2, 13, 4, 5);
+        ctx.fillRect(8, 14, 4, 6);
+      } else {
+        ctx.fillRect(2, 14, 4, 6);
+        ctx.fillRect(8, 14, 4, 6);
+      }
+
+      ctx.fillStyle = p.color;
+      ctx.fillRect(2, 8 + bob, 10, 7);
+
+      ctx.fillStyle = "#facc15";
+      ctx.fillRect(4, 9 + bob, 6, 5);
+
+      ctx.fillStyle = "#fed7aa";
+      ctx.fillRect(4, 3 + bob, 6, 6);
+
+      ctx.fillStyle = p.helmet;
+      ctx.fillRect(2, 0 + bob, 10, 4);
+      ctx.fillRect(1, 3 + bob, 12, 2);
+
+      ctx.fillStyle = "#38bdf8";
+      ctx.fillRect(4, 5 + bob, 6, 2);
+
+      if (p.hasWeapon) {
+        ctx.fillStyle = "#000000";
+        if (p.dir === "right") {
+          ctx.fillRect(10, 11 + bob, 7, 3);
+          ctx.fillRect(10, 13 + bob, 2, 3);
+        } else if (p.dir === "left") {
+          ctx.fillRect(-3, 11 + bob, 7, 3);
+          ctx.fillRect(2, 13 + bob, 2, 3);
+        } else if (p.dir === "up") {
+          ctx.fillRect(10, 5 + bob, 3, 6);
+        } else {
+          ctx.fillRect(10, 12 + bob, 3, 6);
+        }
+      }
+
+      const barW = 20;
+      const barH = 3;
+      const barX = -3;
+      const barY = -8 + bob;
+
+      ctx.fillStyle = "#000000";
+      ctx.fillRect(barX, barY, barW, barH);
+      const hpPct = Math.max(0, p.hp / p.maxHp);
+      ctx.fillStyle = hpPct <= 0.3 ? '#f87171' : (hpPct <= 0.6 ? '#facc15' : '#4ade80');
+      ctx.fillRect(barX, barY, Math.round(barW * hpPct), barH);
+
+      ctx.restore();
+    }
+
+    function drawScanlines() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.04)";
+      for (let y = 0; y < 360; y += 4) {
+        ctx.fillRect(0, y, 640, 2);
+      }
+    }
+
+    function openRoomChallenge(room) {
+      gameState = "CHECKLIST";
+      currentRoom = room;
+      sound.playSfxDoor();
+
+      document.getElementById('modalRoomNorm').textContent = room.norm;
+      document.getElementById('modalRoomTitle').textContent = room.name;
+      document.getElementById('modalRoomDesc').textContent = room.desc;
+
+      p1Selected.clear();
+      p2Selected.clear();
+      updateChecklistUI();
+
+      activeShuffledP1 = shuffleArray(room.p1Options);
+      activeShuffledP2 = shuffleArray(room.p2Options);
+
+      const p1Box = document.getElementById('p1OptionsBox');
+      p1Box.innerHTML = '';
+      activeShuffledP1.forEach((opt, idx) => {
+        const row = document.createElement('div');
+        row.className = 'pixel-option-row';
+        row.id = `opt-p1-${idx}`;
+        row.onclick = () => toggleChecklistItem(1, idx);
+        row.innerHTML = `<span class="retro-badge-key">${idx + 1}</span> ${opt.text}`;
+        p1Box.appendChild(row);
+      });
+
+      const p2Keys = ['7', '8', '9', '0'];
+      const p2Box = document.getElementById('p2OptionsBox');
+      p2Box.innerHTML = '';
+      activeShuffledP2.forEach((opt, idx) => {
+        const row = document.createElement('div');
+        row.className = 'pixel-option-row';
+        row.id = `opt-p2-${idx}`;
+        row.onclick = () => toggleChecklistItem(2, idx);
+        row.innerHTML = `<span class="retro-badge-key">${p2Keys[idx]}</span> ${opt.text}`;
+        p2Box.appendChild(row);
+      });
+
+      clearInterval(timerInterval);
+      timerCountdown = roundDuration;
+      refreshTimerUI();
+      timerInterval = setInterval(() => {
+        timerCountdown--;
+        refreshTimerUI();
+        if (timerCountdown <= 0) {
+          clearInterval(timerInterval);
+          submitChecklist(true);
+        }
+      }, 1000);
+
+      document.getElementById('checklistModal').classList.remove('hidden');
+    }
+
+    function refreshTimerUI() {
+      const el = document.getElementById('modalTimerBox');
+      el.textContent = `⏱ 00:${timerCountdown < 10 ? '0' : ''}${timerCountdown}`;
+      if (timerCountdown <= 8) el.style.color = "#f87171";
+      else el.style.color = "#fb923c";
+    }
+
+    function toggleChecklistItem(player, idx) {
+      sound.playSfxSelect();
+      const set = (player === 1) ? p1Selected : p2Selected;
+      const prefix = (player === 1) ? 'opt-p1-' : 'opt-p2-';
+      const activeClass = (player === 1) ? 'selected-p1' : 'selected-p2';
+      const row = document.getElementById(`${prefix}${idx}`);
+
+      if (set.has(idx)) {
+        set.delete(idx);
+        row.classList.remove(activeClass);
+      } else {
+        if (set.size >= 2) {
+          const oldest = set.values().next().value;
+          set.delete(oldest);
+          document.getElementById(`${prefix}${oldest}`).classList.remove(activeClass);
+        }
+        set.add(idx);
+        row.classList.add(activeClass);
+      }
+      updateChecklistUI();
+    }
+
+    function updateChecklistUI() {
+      document.getElementById('p1StatusText').textContent = `P1: ${p1Selected.size}/2`;
+      document.getElementById('p2StatusText').textContent = `P2: ${p2Selected.size}/2`;
+    }
+
+    function submitChecklist(isTimeout = false) {
+      clearInterval(timerInterval);
+      document.getElementById('checklistModal').classList.add('hidden');
+
+      let p1Hits = 0;
+      p1Selected.forEach(i => { if (activeShuffledP1[i].correct) p1Hits++; });
+      const p1Success = (p1Selected.size === 2 && p1Hits === 2);
+
+      let p2Hits = 0;
+      p2Selected.forEach(i => { if (activeShuffledP2[i].correct) p2Hits++; });
+      const p2Success = (p2Selected.size === 2 && p2Hits === 2);
+
+      let roundPts = 0;
+      if (p1Success && p2Success) {
+        roundPts = 160 + (timerCountdown * 2);
+        sound.playSfxCorrect();
+        clearedRooms.add(currentRoom.id);
+      } else {
+        roundPts = (p1Hits * 35) + (p2Hits * 35);
+        sound.playSfxError();
+      }
+
+      totalScore += roundPts;
+      document.getElementById('hudRoomsCleared').textContent = `${clearedRooms.size} / 5`;
+      document.getElementById('hudTotalScore').textContent = `${totalScore}`;
+
+      const title = document.getElementById('reviewResultTitle');
+      if (isTimeout) {
+        title.textContent = "TEMPO ESGOTADO NA ANÁLISE!";
+        title.style.color = "#f87171";
+      } else if (p1Success && p2Success) {
+        title.textContent = "LIBERAÇÃO DE TRABALHO APROVADA!";
+        title.style.color = "#4ade80";
+      } else {
+        title.textContent = "NÃO-CONFORMIDADE DETECTADA NA APR!";
+        title.style.color = "#facc15";
+      }
+
+      document.getElementById('reviewScoreEarned').textContent = `+${roundPts} PTS`;
+      document.getElementById('reviewP1Text').innerHTML = `<strong>OPERADOR:</strong> ${p1Success ? '✔ EPIs corretos.' : '✖ Falha em proteção essencial.'}<br>${currentRoom.p1Feedback}`;
+      document.getElementById('reviewP2Text').innerHTML = `<strong>FISCAL:</strong> ${p2Success ? '✔ Medidas e PT em ordem.' : '✖ Falha grave no procedimento legal.'}<br>${currentRoom.p2Feedback}`;
+      document.getElementById('reviewNormText').innerHTML = `<strong>FUNDAMENTO NORMATIVO:</strong><br>${currentRoom.normRule}`;
+
+      gameState = "REVIEW";
+      document.getElementById('reviewModal').classList.remove('hidden');
+    }
+
+    function closeReviewModal() {
+      document.getElementById('reviewModal').classList.add('hidden');
+      player1.y = 260;
+      player2.y = 260;
+
+      if (clearedRooms.size >= safetyRooms.length) {
+        startEndingFadeSequence();
+      } else {
+        gameState = "LOBBY";
+      }
+    }
+
+    function startEndingFadeSequence() {
+      gameState = "ENDING";
+      sound.stopMusic();
+
+      const overlay = document.getElementById('endingFadeBlackOverlay');
+      const endingScreen = document.getElementById('endingScreen');
+
+      overlay.classList.add('fade-active');
+
+      setTimeout(() => {
+        sound.startEndingMusic();
+        endingScreen.classList.add('ending-visible');
+      }, 1600);
+    }
+
+    function backToMainMenuFromEnding() {
+      sound.playSfxSelect();
+      sound.stopEndingMusic();
+
+      const overlay = document.getElementById('endingFadeBlackOverlay');
+      const endingScreen = document.getElementById('endingScreen');
+      
+      endingScreen.classList.remove('ending-visible');
+      overlay.classList.remove('fade-active');
+
+      backToMainMenu();
+    }
+
+    function enterGameCorridor() {
+      sound.init();
+      sound.startMusic();
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById('gameScreen').classList.add('active');
+
+      gameState = "LOBBY";
+      clearedRooms.clear();
+      totalScore = 0;
+      bullets = [];
+
+      player1.hp = 10;
+      player1.hasWeapon = false;
+      player1.shootCooldown = 0;
+
+      player2.hp = 10;
+      player2.hasWeapon = false;
+      player2.shootCooldown = 0;
+
+      weaponSpawns.forEach(w => w.taken = false);
+
+      updateHpUI();
+      document.getElementById('hudRoomsCleared').textContent = "0 / 5";
+      document.getElementById('hudTotalScore').textContent = "0";
+
+      player1.x = 100; player1.y = 260;
+      player2.x = 130; player2.y = 260;
+      cameraX = 0;
+      cameraY = 0;
+    }
+
+    function backToMainMenu() {
+      sound.playSfxSelect();
+      clearInterval(timerInterval);
+      closeAllModals();
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById('titleScreen').classList.add('active');
+      gameState = "MENU";
+    }
+
+    function openModal(id) {
+      sound.playSfxSelect();
+      document.getElementById(id).classList.remove('hidden');
+    }
+
+    function closeModal(id) {
+      sound.playSfxSelect();
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    function closeAllModals() {
+      document.querySelectorAll('.retro-modal-overlay').forEach(m => m.classList.add('hidden'));
+    }
+
+    function toggleAudioQuick() {
+      sound.init();
+      const btnHUD = document.getElementById('btnAudioToggleHUD');
+      const cfgBtn = document.getElementById('cfgMusicBtn');
+
+      if (sound.isPlaying || sound.isEndingPlaying) {
+        sound.stopMusic();
+        sound.stopEndingMusic();
+        sound.musicEnabled = false;
+        if (btnHUD) btnHUD.textContent = "🔇 SOM";
+        if (cfgBtn) cfgBtn.textContent = "DESLIGADA";
+      } else {
+        sound.musicEnabled = true;
+        if (gameState === "ENDING") {
+          sound.startEndingMusic();
+        } else {
+          sound.startMusic();
+        }
+        if (btnHUD) btnHUD.textContent = "🔊 SOM";
+        if (cfgBtn) cfgBtn.textContent = "LIGADA";
+      }
+    }
+
+    function updateRoundTime(val) {
+      roundDuration = parseInt(val, 10);
+    }
+
+    function quitApp() {
+      sound.stopMusic();
+      sound.stopEndingMusic();
+      document.body.innerHTML = `
+        <div style="text-align:center; padding:40px; font-family:'Press Start 2P';">
+          <h2 style="color:#facc15; font-size:16px; margin-bottom:16px;">SESSÃO ENCERRADA</h2>
+          <p style="font-family:'VT323'; font-size:22px; color:#cbd5e1; margin-bottom:24px;">SEGURANÇA DO TRABALHO: UMA CONSTRUÇÃO DIÁRIA!</p>
+          <button class="pixel-btn primary" onclick="location.reload()">REINICIAR SIMULADOR</button>
+        </div>
+      `;
+    }
+
+    function gameLoop() {
+      try {
+        updateLobby();
+        renderLobby();
+      } catch (err) {
+        console.error("Erro no gameLoop:", err);
+      }
+      requestAnimationFrame(gameLoop);
+    }
+
+    function drawPreviews() {
+      const c1 = document.getElementById('previewP1').getContext('2d');
+      const c2 = document.getElementById('previewP2').getContext('2d');
+      c1.imageSmoothingEnabled = false;
+      c2.imageSmoothingEnabled = false;
+
+      c1.fillStyle = "#1e293b"; c1.fillRect(8, 28, 6, 8); c1.fillRect(18, 28, 6, 8);
+      c1.fillStyle = "#0284c7"; c1.fillRect(6, 16, 20, 14);
+      c1.fillStyle = "#facc15"; c1.fillRect(10, 18, 12, 10);
+      c1.fillStyle = "#fed7aa"; c1.fillRect(10, 6, 12, 12);
+      c1.fillStyle = "#f97316"; c1.fillRect(6, 0, 20, 8); c1.fillRect(4, 6, 24, 3);
+      c1.fillStyle = "#38bdf8"; c1.fillRect(10, 10, 12, 3);
+
+      c2.fillStyle = "#1e293b"; c2.fillRect(8, 28, 6, 8); c2.fillRect(18, 28, 6, 8);
+      c2.fillStyle = "#059669"; c2.fillRect(6, 16, 20, 14);
+      c2.fillStyle = "#facc15"; c2.fillRect(10, 18, 12, 10);
+      c2.fillStyle = "#fed7aa"; c2.fillRect(10, 6, 12, 12);
+      c2.fillStyle = "#f8fafc"; c2.fillRect(6, 0, 20, 8); c2.fillRect(4, 6, 24, 3);
+      c2.fillStyle = "#38bdf8"; c2.fillRect(10, 10, 12, 3);
+    }
+
+    window.onload = () => {
+      drawPreviews();
+      requestAnimationFrame(gameLoop);
+    };
+  </script>
+</body>
+</html>
