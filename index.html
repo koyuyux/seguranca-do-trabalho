@@ -633,12 +633,12 @@
 
       <div class="checklist-split-grid">
         <div class="checklist-col">
-          <div class="col-header-p1">OPERADOR • SELECIONE 2 EPIs (Teclas 1, 2, 3, 4)</div>
+          <div class="col-header-p1">OPERADOR • SELECIONE 2 ITENS CORRETOS (Teclas 1, 2, 3, 4)</div>
           <div id="p1OptionsBox" style="display:flex; flex-direction:column; gap:6px;"></div>
         </div>
 
         <div class="checklist-col">
-          <div class="col-header-p2">FISCAL • SELECIONE 2 MEDIDAS (Teclas 7, 8, 9, 0)</div>
+          <div class="col-header-p2">FISCAL • SELECIONE 2 MEDIDAS CORRETAS (Teclas 7, 8, 9, 0)</div>
           <div id="p2OptionsBox" style="display:flex; flex-direction:column; gap:6px;"></div>
         </div>
       </div>
@@ -899,6 +899,9 @@
 
     const sound = new PixelAudioEngine();
 
+    // =========================================================================
+    // BANCO COMPLETO DE PERGUNTAS (20 ITENS POR NR: 10 P1 E 10 P2)
+    // =========================================================================
     const safetyRooms = [
       {
         id: "height",
@@ -910,20 +913,32 @@
         doorPadX: 120, doorPadY: 200, padW: 100, padH: 26,
         themeColor: "#facc15",
         decor: "scaffold",
-        p1Options: [
+        p1Pool: [
           { text: "Cinturão tipo paraquedista c/ talabarte duplo em Y e absorvedor", correct: true },
-          { text: "Capacete de proteção c/ jugular firmemente ajustada", correct: true },
-          { text: "Luvas descartáveis comuns de látex de limpeza", correct: false },
-          { text: "Calçado esportivo de corrida sem sola antiderrapante", correct: false }
+          { text: "Capacete de proteção c/ jugular firmemente ajustada ao queixo", correct: true },
+          { text: "Calçado de segurança c/ solado antiderrapante e biqueira", correct: true },
+          { text: "Trava-quedas vertical acoplado à linha de vida de aço na subida", correct: true },
+          { text: "Bolsa de lona para transporte seguro e amarração de ferramentas", correct: true },
+          { text: "Luvas descartáveis comuns de látex de limpeza doméstica", correct: false },
+          { text: "Calçado esportivo de corrida sem sola antiderrapante", correct: false },
+          { text: "Cinto abdominal comum de eletricista para retenção de queda", correct: false },
+          { text: "Talabarte simples sem absorvedor ancorado em tubulação de PVC", correct: false },
+          { text: "Ferramentas manuais pesadas soltas nos bolsos da calça na escada", correct: false }
         ],
-        p2Options: [
+        p2Pool: [
           { text: "Emissão formal da Permissão de Trabalho (PT) e ASO de altura", correct: true },
           { text: "Inspeção e ancoragem homologada em linha de vida certificada", correct: true },
-          { text: "Isolamento do piso dispensado por ser manutenção rápida", correct: false },
-          { text: "Autorização verbal simples do encarregado de turno", correct: false }
+          { text: "Isolamento e sinalização da área térrea contra queda de materiais", correct: true },
+          { text: "Análise de Risco (AR) contemplando condições climáticas e vento", correct: true },
+          { text: "Planejamento prévio e equipe de resgate e primeiros socorros", correct: true },
+          { text: "Isolamento do piso dispensado por ser manutenção rápida de 10 min", correct: false },
+          { text: "Autorização verbal simples do encarregado sem emissão de PT", correct: false },
+          { text: "Liberação de subida em telhado úmido sob garoa sem linha de vida", correct: false },
+          { text: "Permissão para usar escada de madeira como ponto de ancoragem", correct: false },
+          { text: "Dispensa de ASO se o trabalhador declarar verbalmente boa saúde", correct: false }
         ],
-        p1Feedback: "O talabarte duplo garante fixação contínua e a jugular evita queda do capacete.",
-        p2Feedback: "A emissão da PT formal e a conferência do ASO em altura são mandatórias.",
+        p1Feedback: "O talabarte duplo garante fixação contínua e a jugular impede a perda do capacete.",
+        p2Feedback: "A PT formal, ancoragem homologada e isolamento térreo são mandatórios.",
         normRule: "NR-35.4: Toda atividade acima de 2,00m requer Análise de Risco (AR), PT formal e ancoragem homologada."
       },
       {
@@ -936,20 +951,32 @@
         doorPadX: 430, doorPadY: 200, padW: 100, padH: 26,
         themeColor: "#38bdf8",
         decor: "manhole",
-        p1Options: [
-          { text: "Detector multigás calibrado na zona respiratória", correct: true },
-          { text: "Respirador autônomo / linha de ar mandado com pressão positiva", correct: true },
-          { text: "Máscara de pano comum contra poeira", correct: false },
-          { text: "Lanterna manual doméstica sem certificação intrínseca", correct: false }
+        p1Pool: [
+          { text: "Detector multigás calibrado fixado na zona respiratória", correct: true },
+          { text: "Respirador autônomo / linha de ar mandado c/ pressão positiva", correct: true },
+          { text: "Lanterna manual c/ certificação intrinsecamente segura (Ex)", correct: true },
+          { text: "Cinto de resgate com alças nos ombros acopladas a guincho", correct: true },
+          { text: "Rádio comunicador homologado para contato contínuo c/ vigia", correct: true },
+          { text: "Máscara de pano comum contra poeira para filtrar gases", correct: false },
+          { text: "Lanterna manual doméstica sem certificação intrínseca", correct: false },
+          { text: "Retirar a máscara dentro do tanque se o odor parecer normal", correct: false },
+          { text: "Descida ao interior segurando corda lisa sem cinto de resgate", correct: false },
+          { text: "Uso de isqueiro ou chama aberta para checar oxigênio no fundo", correct: false }
         ],
-        p2Options: [
-          { text: "Emissão obrigatória da PET assinada pelo Supervisor Técnico", correct: true },
+        p2Pool: [
+          { text: "Emissão obrigatória da PET assinada pelo Supervisor de Entrada", correct: true },
           { text: "Vigia treinado postado no exterior com tripé e guincho de resgate", correct: true },
+          { text: "Medição prévia e contínua de O2, inflamabilidade, CO e H2S", correct: true },
+          { text: "Ventilação mecânica insufladora e exaustora prévia e contínua", correct: true },
+          { text: "Teste funcional diário (bump test) do detector de gases", correct: true },
           { text: "Ventilar o interior usando mangueira de ar comprimido fabril", correct: false },
-          { text: "Autorizar descida individual sem vigia para checagem rápida", correct: false }
+          { text: "Autorizar descida individual sem vigia para checagem rápida", correct: false },
+          { text: "Assinatura da PET com campos de medição em branco para depois", correct: false },
+          { text: "Permitir que o vigia saia da entrada para buscar ferramentas", correct: false },
+          { text: "Dispensa de guincho de resgate para tanques com menos de 3 metros", correct: false }
         ],
         p1Feedback: "O detector multigás monitora gases tóxicos e a linha com pressão previne asfixia.",
-        p2Feedback: "O vigia permanece do lado de fora com guincho de resgate contínuo.",
+        p2Feedback: "O vigia permanece do lado de fora com guincho e a PET formal assinada.",
         normRule: "NR-33.3: Entrada somente com PET emitida, medição contínua e vigia treinado no exterior."
       },
       {
@@ -962,20 +989,32 @@
         doorPadX: 740, doorPadY: 200, padW: 100, padH: 26,
         themeColor: "#fb923c",
         decor: "transformer",
-        p1Options: [
-          { text: "Uniforme 100% algodão com proteção contra arco voltaico (ATPV)", correct: true },
-          { text: "Luvas de borracha isolante para média tensão com sobreluva", correct: true },
-          { text: "Alicate universal com fita isolante comum no cabo", correct: false },
-          { text: "Uso de anel de formatura metálico e relógio de pulso", correct: false }
+        p1Pool: [
+          { text: "Uniforme 100% algodão c/ proteção contra arco elétrico (ATPV)", correct: true },
+          { text: "Luvas de borracha isolante de média tensão c/ sobreluva vaqueta", correct: true },
+          { text: "Ferramentas manuais isoladas certificadas para até 1.000 V", correct: true },
+          { text: "Protetor facial contra arco voltaico em capacete classe B", correct: true },
+          { text: "Calçado de segurança isolante sem partes metálicas expostas", correct: true },
+          { text: "Alicate universal com fita isolante comum enrolada no cabo", correct: false },
+          { text: "Uso de anel de formatura metálico, corrente e relógio de pulso", correct: false },
+          { text: "Utilização de chave de fenda comum c/ haste metálica exposta", correct: false },
+          { text: "Manuseio de barramento de alta tensão com luva cirúrgica", correct: false },
+          { text: "Testar presença de tensão encostando o dorso da mão no painel", correct: false }
         ],
-        p2Options: [
-          { text: "Desenergização e bloqueio físico com cadeado e etiqueta (LOTO)", correct: true },
-          { text: "Teste de ausência de tensão seguido de aterramento temporário", correct: true },
+        p2Pool: [
+          { text: "Desenergização e bloqueio físico c/ cadeado e etiqueta (LOTO)", correct: true },
+          { text: "Constatação de ausência de tensão seguida de terra temporário", correct: true },
+          { text: "Emissão de Ordem de Serviço e conferência de treinamento SEP", correct: true },
+          { text: "Instalação de mantas isolantes e sinalização de bloqueio", correct: true },
+          { text: "Verificação e atualização do Prontuário Elétrico (PIE)", correct: true },
           { text: "Apenas desligar o disjuntor sem trancar o painel com cadeado", correct: false },
-          { text: "Liberar a tarefa sem ordem formal por urgência na produção", correct: false }
+          { text: "Liberar a tarefa sem ordem formal por urgência na produção", correct: false },
+          { text: "Dispensar aterramento temporário por ser manutenção rápida", correct: false },
+          { text: "Aceitar aviso verbal aos colegas de turno como garantia de bloqueio", correct: false },
+          { text: "Permitir intervenção técnica com poça d'água em frente ao painel", correct: false }
         ],
-        p1Feedback: "Vestuário ATPV previne queimaduras e luvas ensaiadas impedem o choque elétrico.",
-        p2Feedback: "O bloqueio LOTO impede o religamento acidental fatal durante o serviço.",
+        p1Feedback: "Vestuário ATPV previne queimaduras graves e luvas ensaiadas impedem choque.",
+        p2Feedback: "O bloqueio LOTO, teste de tensão e aterramento temporário são mandatórios.",
         normRule: "NR-10.5: Desenergização inclui seccionamento, bloqueio LOTO, teste de tensão e terra."
       },
       {
@@ -988,17 +1027,29 @@
         doorPadX: 1050, doorPadY: 200, padW: 100, padH: 26,
         themeColor: "#ef4444",
         decor: "press",
-        p1Options: [
+        p1Pool: [
           { text: "Inserção de calço mecânico estrutural travando o martelo superior", correct: true },
-          { text: "Óculos de proteção com aba lateral e protetor concha auricular", correct: true },
-          { text: "Luvas de pano soltas perto de cilindros giratórios em teste", correct: false },
-          { text: "Apoiar o corpo entre as matrizes sem instalar suportes mecânicos", correct: false }
+          { text: "Óculos de proteção c/ aba lateral e protetor concha auricular", correct: true },
+          { text: "Uso de pinça prolongadora para retirar peças presas da matriz", correct: true },
+          { text: "Cabelos compridos presos e cobertos por touca perto de eixos", correct: true },
+          { text: "Botas c/ biqueira de aço e vestimenta justa sem partes soltas", correct: true },
+          { text: "Luvas de pano folgadas perto de cilindros giratórios em teste", correct: false },
+          { text: "Apoiar o corpo entre as matrizes sem instalar suportes mecânicos", correct: false },
+          { text: "Ajustar engrenagens e correntes com a máquina em rotação lenta", correct: false },
+          { text: "Burlar cortina óptica passando o braço por baixo do feixe", correct: false },
+          { text: "Roupas com mangas largas soltas ou cordões operando a prensa", correct: false }
         ],
-        p2Options: [
-          { text: "Alívio de pressão residual do circuito hidráulico e bloqueio de energia", correct: true },
-          { text: "Teste de desarme da cortina óptica e comando bimanual de segurança", correct: true },
+        p2Pool: [
+          { text: "Alívio de pressão residual do circuito hidráulico e bloqueio LOTO", correct: true },
+          { text: "Teste de desarme da cortina óptica e comando bimanual seguro", correct: true },
+          { text: "Interdição imediata se chaves intertravadas estiverem burladas", correct: true },
+          { text: "Validação da distância segura entre comando bimanual e matriz", correct: true },
+          { text: "Conferência de botão de emergência tipo cogumelo desobstruído", correct: true },
           { text: "Manter operador acionando o pedal durante o ajuste manual do colega", correct: false },
-          { text: "Burlar a chave de segurança da porta de acesso com fita para agilizar", correct: false }
+          { text: "Burlar a chave de segurança da porta de acesso com fita para agilizar", correct: false },
+          { text: "Autorizar operador sem treinamento de capacitação na máquina", correct: false },
+          { text: "Retirar proteções físicas fixas do motor para facilitar ventilação", correct: false },
+          { text: "Desativar o botão de emergência que estiver desarmando com frequência", correct: false }
         ],
         p1Feedback: "O calço mecânico impede a descida gravitacional do martelo da prensa.",
         p2Feedback: "Circuitos hidráulicos guardam pressão residual crítica mesmo desligados.",
@@ -1014,17 +1065,29 @@
         doorPadX: 1360, doorPadY: 200, padW: 100, padH: 26,
         themeColor: "#10b981",
         decor: "barrels",
-        p1Options: [
-          { text: "Luvas de borracha nitrílica ou butílica impermeáveis a solventes", correct: true },
-          { text: "Respirador semifacial com cartucho químico para vapores orgânicos", correct: true },
+        p1Pool: [
+          { text: "Luvas de borracha nitrílica impermeáveis a solventes orgânicos", correct: true },
+          { text: "Respirador semifacial c/ filtro químico para vapores orgânicos", correct: true },
+          { text: "Óculos de proteção ampla visão com vedação contra respingos", correct: true },
+          { text: "Avental impermeável resistente a solventes durante o fracionamento", correct: true },
+          { text: "Calçado de segurança antiestático sem cravos metálicos", correct: true },
           { text: "Garrafas PET de água mineral para transportar o solvente", correct: false },
-          { text: "Calçado com cravos de metal capazes de gerar faísca no piso", correct: false }
+          { text: "Calçado com cravos de metal capazes de gerar faísca no piso", correct: false },
+          { text: "Uso de isqueiro ou celular comum para iluminar bocal do tambor", correct: false },
+          { text: "Armazenar estopas sujas de solvente em pilhas abertas no chão", correct: false },
+          { text: "Lavar mãos ou braços diretamente com thinner para tirar graxa", correct: false }
         ],
-        p2Options: [
+        p2Pool: [
           { text: "Instalação do cabo de aterramento e equalização estática entre tambores", correct: true },
           { text: "Disponibilização da FDS (FISPQ) e kit de contenção de derramamento", correct: true },
+          { text: "Verificação do sistema de exaustão mecânica à prova de explosão", correct: true },
+          { text: "Demarcação da área classificada e controle rígido de fontes de fogo", correct: true },
+          { text: "Validação de extintores portáteis de pó químico e CO2 desobstruídos", correct: true },
           { text: "Fracionar produto em depósito fechado sem exaustão ou ventilação", correct: false },
-          { text: "Utilizar bomba plástica comum sem proteção antiestática", correct: false }
+          { text: "Utilizar bomba plástica comum sem proteção antiestática", correct: false },
+          { text: "Dispensar a ficha de segurança (FDS) alegando produto de uso comum", correct: false },
+          { text: "Permitir serviços a quente com lixadeira próximo a tambores abertos", correct: false },
+          { text: "Autorizar descarte de sobras de solvente no ralo comum do galpão", correct: false }
         ],
         p1Feedback: "O tolueno exige luvas apropriadas e filtro para vapores químicos orgânicos.",
         p2Feedback: "O aterramento elimina a faísca estática gerada pelo fluxo de combustível.",
@@ -1139,6 +1202,13 @@
         [copy[i], copy[j]] = [copy[j], copy[i]];
       }
       return copy;
+    }
+
+    // Função que seleciona aleatoriamente 2 itens corretos e 2 incorretos do banco da sala
+    function pickRandomChecklist(pool) {
+      const correct = shuffleArray(pool.filter(item => item.correct)).slice(0, 2);
+      const wrong = shuffleArray(pool.filter(item => !item.correct)).slice(0, 2);
+      return shuffleArray([...correct, ...wrong]);
     }
 
     function firePlayerWeapon(player, ownerId) {
@@ -1275,7 +1345,6 @@
         player2.vy = 0;
       }
 
-      // Movimentação com colisão física mútua
       moveWorker(player1, player2, p1Move);
       moveWorker(player2, player1, p2Move);
 
@@ -1300,14 +1369,12 @@
       checkRoomActivation();
     }
 
-    // Função de movimento com verificação de limites do galpão e colisão com outro jogador
     function moveWorker(ent, other, isMoving) {
       const nextX = ent.x + ent.vx;
       const nextY = ent.y + ent.vy;
 
       const isCurrentlyOverlapping = other && rectOverlap(ent.x, ent.y, ent.w, ent.h, other.x, other.y, other.w, other.h);
 
-      // Colisão Vertical (Eixo Y) com o outro boneco
       const collidesY = other && rectOverlap(ent.x, nextY, ent.w, ent.h, other.x, other.y, other.w, other.h);
       const allowsY = !collidesY || (isCurrentlyOverlapping && Math.abs(nextY - other.y) > Math.abs(ent.y - other.y));
 
@@ -1315,7 +1382,6 @@
         ent.y = nextY;
       }
 
-      // Colisão Horizontal (Eixo X) com o outro boneco
       const collidesX = other && rectOverlap(nextX, ent.y, ent.w, ent.h, other.x, other.y, other.w, other.h);
       const allowsX = !collidesX || (isCurrentlyOverlapping && Math.abs(nextX - other.x) > Math.abs(ent.x - other.x));
 
@@ -2326,6 +2392,7 @@
       }
     }
 
+    // Abertura do desafio com sorteio aleatório (2 certas e 2 erradas para cada participante)
     function openRoomChallenge(room) {
       gameState = "CHECKLIST";
       currentRoom = room;
@@ -2339,8 +2406,9 @@
       p2Selected.clear();
       updateChecklistUI();
 
-      activeShuffledP1 = shuffleArray(room.p1Options);
-      activeShuffledP2 = shuffleArray(room.p2Options);
+      // Sorteia dinamicamente do banco de 10 perguntas de cada participante
+      activeShuffledP1 = pickRandomChecklist(room.p1Pool);
+      activeShuffledP2 = pickRandomChecklist(room.p2Pool);
 
       const p1Box = document.getElementById('p1OptionsBox');
       p1Box.innerHTML = '';
@@ -2453,7 +2521,7 @@
       }
 
       document.getElementById('reviewScoreEarned').textContent = `+${roundPts} PTS`;
-      document.getElementById('reviewP1Text').innerHTML = `<strong>OPERADOR:</strong> ${p1Success ? '✔ EPIs corretos.' : '✖ Falha em proteção essencial.'}<br>${currentRoom.p1Feedback}`;
+      document.getElementById('reviewP1Text').innerHTML = `<strong>OPERADOR:</strong> ${p1Success ? '✔ Itens e EPIs corretos.' : '✖ Falha em proteção essencial.'}<br>${currentRoom.p1Feedback}`;
       document.getElementById('reviewP2Text').innerHTML = `<strong>FISCAL:</strong> ${p2Success ? '✔ Medidas e PT em ordem.' : '✖ Falha grave no procedimento legal.'}<br>${currentRoom.p2Feedback}`;
       document.getElementById('reviewNormText').innerHTML = `<strong>FUNDAMENTO NORMATIVO:</strong><br>${currentRoom.normRule}`;
 
