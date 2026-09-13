@@ -51,6 +51,247 @@
       display: flex;
     }
 
+    #introScreen {
+      background: #000;
+      padding: 0;
+      overflow: hidden;
+      position: relative;
+      justify-content: center;
+    }
+
+    .intro-layer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #introLoading {
+      background: radial-gradient(circle at center, #1b263b 0%, #05070c 90%);
+      gap: 24px;
+    }
+
+    .intro-logo-pixel {
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    .logo-line1, .logo-line2 {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 34px;
+      color: #fff;
+      text-shadow: 4px 4px 0 #0284c7, 8px 8px 0 #000;
+      letter-spacing: 3px;
+    }
+
+    .logo-line2 {
+      color: var(--pixel-yellow);
+    }
+
+    .logo-sub {
+      font-family: 'VT323', monospace;
+      font-size: 26px;
+      color: #94a3b8;
+      letter-spacing: 4px;
+      margin-top: 10px;
+    }
+
+    .pixel-loader {
+      width: 280px;
+      height: 22px;
+      background: #0f172a;
+      border: 3px solid #334155;
+      box-shadow: 4px 4px 0 #000;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pixel-loader-bar {
+      height: 100%;
+      width: 0%;
+      background: repeating-linear-gradient(
+        90deg,
+        var(--pixel-yellow) 0px,
+        var(--pixel-yellow) 8px,
+        #f59e0b 8px,
+        #f59e0b 16px
+      );
+      transition: width 0.15s linear;
+      image-rendering: pixelated;
+    }
+
+    .intro-loading-text {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 9px;
+      color: #64748b;
+      letter-spacing: 2px;
+      animation: blink 1s steps(2) infinite;
+    }
+
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0.3; }
+    }
+
+    #introVideoLayer {
+      background: #000;
+      padding: 0;
+    }
+
+    #introVideo {
+      width: 100vw;
+      height: 100vh;
+      object-fit: contain;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+      background: #000;
+      display: block;
+    }
+
+    .intro-btn {
+      position: absolute;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 9px;
+      color: #fff;
+      background: rgba(15, 23, 42, 0.85);
+      border: 2px solid #475569;
+      padding: 10px 14px;
+      cursor: pointer;
+      box-shadow: 3px 3px 0 #000;
+      z-index: 10;
+      letter-spacing: 1px;
+      transition: background 0.1s, border-color 0.1s, transform 0.1s;
+    }
+
+    .intro-btn:hover {
+      background: rgba(37, 99, 235, 0.9);
+      border-color: #93c5fd;
+      transform: translate(-1px, -1px);
+    }
+
+    .intro-btn:active {
+      transform: translate(1px, 1px);
+    }
+
+    .intro-btn-sound {
+      top: 18px;
+      right: 18px;
+    }
+
+    .intro-btn-skip {
+      bottom: 18px;
+      right: 18px;
+      background: rgba(30, 41, 59, 0.7);
+      border-color: #64748b;
+      opacity: 0.85;
+    }
+
+    .intro-btn-skip:hover {
+      opacity: 1;
+      background: rgba(220, 38, 38, 0.85);
+      border-color: #fca5a5;
+    }
+
+    .intro-btn-start {
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 14px;
+      padding: 22px 36px;
+      background: #059669;
+      border-color: #6ee7b7;
+      box-shadow: 6px 6px 0 #000;
+    }
+
+    .intro-btn-start:hover {
+      background: #10b981;
+      border-color: #a7f3d0;
+      transform: translate(-50%, -50%) scale(1.05);
+    }
+
+    .intro-dont-show {
+      position: absolute;
+      bottom: 18px;
+      left: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 8px;
+      color: #cbd5e1;
+      background: rgba(15, 23, 42, 0.8);
+      border: 2px solid #334155;
+      padding: 8px 12px;
+      cursor: pointer;
+      z-index: 10;
+      letter-spacing: 1px;
+    }
+
+    .intro-dont-show input[type="checkbox"] {
+      accent-color: var(--pixel-yellow);
+      width: 14px;
+      height: 14px;
+      cursor: pointer;
+    }
+
+    .intro-fade-out {
+      animation: introFadeOut 600ms ease-in forwards;
+    }
+
+    @keyframes introFadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+
+    .intro-fade-in {
+      animation: introFadeIn 600ms ease-out forwards;
+    }
+
+    @keyframes introFadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    #introFallback {
+      background: #000;
+      text-align: center;
+      gap: 16px;
+    }
+
+    .intro-fallback-art {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .fallback-title {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 32px;
+      color: #fff;
+      text-shadow: 4px 4px 0 #dc2626, 8px 8px 0 #000;
+      letter-spacing: 3px;
+    }
+
+    .fallback-sub {
+      font-family: 'VT323', monospace;
+      font-size: 24px;
+      color: var(--pixel-yellow);
+      letter-spacing: 4px;
+    }
+
+    .fallback-msg {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 10px;
+      color: #f87171;
+      margin-top: 20px;
+      animation: blink 1.2s steps(2) infinite;
+    }
+
     #titleScreen {
       background: radial-gradient(circle at center, #1b263b 0%, #090d14 90%);
       padding: 24px;
@@ -161,6 +402,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      gap: 16px;
       padding-top: 10px;
       border-top: 2px dashed #334155;
     }
@@ -393,9 +635,6 @@
       gap: 8px;
     }
 
-    /* =========================================================================
-       TELA DE ENDING E TRANSIÇÃO GRADUAL (FADE TO BLACK)
-       ========================================================================= */
     #endingFadeBlackOverlay {
       position: fixed;
       top: 0;
@@ -524,7 +763,7 @@
   <section id="endingScreen">
     <div class="ending-header-badge">★ PROTOCOLO DE SEGURANÇA 100% CUMPRIDO ★</div>
     
-    <h1 class="ending-main-title">“VOCÊ GARANTIU A SEGURANÇA NO TRABALHO”</h1>
+    <h1 class="ending-main-title">"VOCÊ GARANTIU A SEGURANÇA NO TRABALHO"</h1>
     
     <p class="ending-subtitle">
       Todas as áreas de risco foram controladas com excelência segundo as Normas Regulamentadoras.<br>
@@ -548,7 +787,48 @@
     </div>
   </section>
 
-  <section class="screen active" id="titleScreen">
+  <section class="screen active" id="introScreen">
+    <div id="introLoading" class="intro-layer">
+      <div class="intro-logo-pixel">
+        <div class="logo-line1">PROTOCOLO</div>
+        <div class="logo-line2">DUPLO</div>
+        <div class="logo-sub">CORREDOR INDUSTRIAL PIXEL</div>
+      </div>
+      <div class="pixel-loader">
+        <div class="pixel-loader-bar" id="introProgressBar"></div>
+      </div>
+      <div class="intro-loading-text">CARREGANDO TRAILER...</div>
+    </div>
+
+    <div id="introVideoLayer" class="intro-layer hidden">
+      <video
+        id="introVideo"
+        src="assets/abertura.mp4"
+        muted
+        playsinline
+        preload="metadata"
+      ></video>
+
+      <button id="btnIntroSound" class="intro-btn intro-btn-sound hidden">🔊 ATIVAR SOM</button>
+      <button id="btnIntroStart" class="intro-btn intro-btn-start hidden">▶ INICIAR</button>
+    </div>
+
+    <div id="introFallback" class="intro-layer hidden">
+      <div class="intro-fallback-art">
+        <div class="fallback-title">PROTOCOLO DUPLO</div>
+        <div class="fallback-sub">CORREDOR INDUSTRIAL PIXEL</div>
+        <div class="fallback-msg">⚠ TRAILER INDISPONÍVEL ⚠</div>
+      </div>
+    </div>
+
+    <button id="btnIntroSkip" class="intro-btn intro-btn-skip hidden">PULAR INTRODUÇÃO ⏭</button>
+    <label id="introDontShowLabel" class="intro-dont-show">
+      <input type="checkbox" id="chkDontShowIntro">
+      <span>NÃO MOSTRAR NOVAMENTE</span>
+    </label>
+  </section>
+
+  <section class="screen" id="titleScreen">
     <div class="title-header-badge">★ SISTEMA DE GESTÃO SESMT • MODO COOPERATIVO ★</div>
 
     <div class="title-main-box">
@@ -577,6 +857,7 @@
 
     <div class="title-footer-row">
       <span class="footer-note">NR-10 • NR-12 • NR-20 • NR-33 • NR-35 | SEGURANÇA TOTAL</span>
+      <button class="btn-small-link" onclick="replayIntroTrailer()">▶ VER TRAILER</button>
     </div>
   </section>
 
@@ -899,20 +1180,12 @@
 
     const sound = new PixelAudioEngine();
 
-    // =========================================================================
-    // BANCO COMPLETO DE PERGUNTAS (20 ITENS POR NR: 10 P1 E 10 P2)
-    // =========================================================================
     const safetyRooms = [
       {
-        id: "height",
-        norm: "NR-35",
-        name: "SETOR TELHADO & ALTURA",
-        cleanName: "TELHADO & ALTURA",
+        id: "height", norm: "NR-35", name: "SETOR TELHADO & ALTURA", cleanName: "TELHADO & ALTURA",
         desc: "Equipe escalada para troca de calha metálica avariada a 8 metros de altura na borda do galpão industrial.",
-        roomX: 30, roomY: 20, roomW: 280, roomH: 190,
-        doorPadX: 120, doorPadY: 200, padW: 100, padH: 26,
-        themeColor: "#facc15",
-        decor: "scaffold",
+        roomX: 30, roomY: 20, roomW: 280, roomH: 190, doorPadX: 120, doorPadY: 200, padW: 100, padH: 26,
+        themeColor: "#facc15", decor: "scaffold",
         p1Pool: [
           { text: "Cinturão tipo paraquedista c/ talabarte duplo em Y e absorvedor", correct: true },
           { text: "Capacete de proteção c/ jugular firmemente ajustada ao queixo", correct: true },
@@ -942,15 +1215,10 @@
         normRule: "NR-35.4: Toda atividade acima de 2,00m requer Análise de Risco (AR), PT formal e ancoragem homologada."
       },
       {
-        id: "confined",
-        norm: "NR-33",
-        name: "SETOR TANQUE & ESGOTO",
-        cleanName: "ESPAÇO CONFINADO",
+        id: "confined", norm: "NR-33", name: "SETOR TANQUE & ESGOTO", cleanName: "ESPAÇO CONFINADO",
         desc: "Limpeza interna em tanque de sedimentação subterrâneo com risco de gás sulfídrico (H2S).",
-        roomX: 340, roomY: 20, roomW: 280, roomH: 190,
-        doorPadX: 430, doorPadY: 200, padW: 100, padH: 26,
-        themeColor: "#38bdf8",
-        decor: "manhole",
+        roomX: 340, roomY: 20, roomW: 280, roomH: 190, doorPadX: 430, doorPadY: 200, padW: 100, padH: 26,
+        themeColor: "#38bdf8", decor: "manhole",
         p1Pool: [
           { text: "Detector multigás calibrado fixado na zona respiratória", correct: true },
           { text: "Respirador autônomo / linha de ar mandado c/ pressão positiva", correct: true },
@@ -980,15 +1248,10 @@
         normRule: "NR-33.3: Entrada somente com PET emitida, medição contínua e vigia treinado no exterior."
       },
       {
-        id: "electrical",
-        norm: "NR-10",
-        name: "SUBESTAÇÃO ELÉTRICA",
-        cleanName: "SUBESTAÇÃO ELÉTRICA",
+        id: "electrical", norm: "NR-10", name: "SUBESTAÇÃO ELÉTRICA", cleanName: "SUBESTAÇÃO ELÉTRICA",
         desc: "Manutenção em cubículo de disjuntor primário de média tensão (13.8 kV) após desarme.",
-        roomX: 650, roomY: 20, roomW: 280, roomH: 190,
-        doorPadX: 740, doorPadY: 200, padW: 100, padH: 26,
-        themeColor: "#fb923c",
-        decor: "transformer",
+        roomX: 650, roomY: 20, roomW: 280, roomH: 190, doorPadX: 740, doorPadY: 200, padW: 100, padH: 26,
+        themeColor: "#fb923c", decor: "transformer",
         p1Pool: [
           { text: "Uniforme 100% algodão c/ proteção contra arco elétrico (ATPV)", correct: true },
           { text: "Luvas de borracha isolante de média tensão c/ sobreluva vaqueta", correct: true },
@@ -1018,15 +1281,10 @@
         normRule: "NR-10.5: Desenergização inclui seccionamento, bloqueio LOTO, teste de tensão e terra."
       },
       {
-        id: "machinery",
-        norm: "NR-12",
-        name: "PRENSAS & MÁQUINAS",
-        cleanName: "PRENSAS & MÁQUINAS",
+        id: "machinery", norm: "NR-12", name: "PRENSAS & MÁQUINAS", cleanName: "PRENSAS & MÁQUINAS",
         desc: "Chapa de aço emperrada na matriz superior da prensa hidráulica com risco de esmagamento.",
-        roomX: 960, roomY: 20, roomW: 280, roomH: 190,
-        doorPadX: 1050, doorPadY: 200, padW: 100, padH: 26,
-        themeColor: "#ef4444",
-        decor: "press",
+        roomX: 960, roomY: 20, roomW: 280, roomH: 190, doorPadX: 1050, doorPadY: 200, padW: 100, padH: 26,
+        themeColor: "#ef4444", decor: "press",
         p1Pool: [
           { text: "Inserção de calço mecânico estrutural travando o martelo superior", correct: true },
           { text: "Óculos de proteção c/ aba lateral e protetor concha auricular", correct: true },
@@ -1056,15 +1314,10 @@
         normRule: "NR-12.11: Exige retenção mecânica e eliminação de todas energias residuais."
       },
       {
-        id: "chemical",
-        norm: "NR-20",
-        name: "DEPÓSITO DE QUÍMICOS",
-        cleanName: "DEPÓSITO DE QUÍMICOS",
+        id: "chemical", norm: "NR-20", name: "DEPÓSITO DE QUÍMICOS", cleanName: "DEPÓSITO DE QUÍMICOS",
         desc: "Transferência de solvente volátil inflamável (Tolueno) entre tambores industriais.",
-        roomX: 1270, roomY: 20, roomW: 280, roomH: 190,
-        doorPadX: 1360, doorPadY: 200, padW: 100, padH: 26,
-        themeColor: "#10b981",
-        decor: "barrels",
+        roomX: 1270, roomY: 20, roomW: 280, roomH: 190, doorPadX: 1360, doorPadY: 200, padW: 100, padH: 26,
+        themeColor: "#10b981", decor: "barrels",
         p1Pool: [
           { text: "Luvas de borracha nitrílica impermeáveis a solventes orgânicos", correct: true },
           { text: "Respirador semifacial c/ filtro químico para vapores orgânicos", correct: true },
@@ -1095,14 +1348,7 @@
       }
     ];
 
-    const secretRoom = {
-      x: 50,
-      y: 360,
-      w: 240,
-      h: 210,
-      doorGapX1: 165,
-      doorGapX2: 195
-    };
+    const secretRoom = { x: 50, y: 360, w: 240, h: 210, doorGapX1: 165, doorGapX2: 195 };
 
     const weaponSpawns = [
       { id: 1, x: 95, y: 445, w: 22, h: 14, taken: false, name: "Pistola P1" },
@@ -1135,25 +1381,17 @@
     let cameraY = 0;
 
     const player1 = {
-      x: 100, y: 260, w: 14, h: 20,
-      vx: 0, vy: 0, speed: 2.3,
+      x: 100, y: 260, w: 14, h: 20, vx: 0, vy: 0, speed: 2.3,
       color: "#0284c7", helmet: "#f97316",
       dir: "right", animFrame: 0, animTick: 0,
-      hasWeapon: false,
-      hp: 10,
-      maxHp: 10,
-      shootCooldown: 0
+      hasWeapon: false, hp: 10, maxHp: 10, shootCooldown: 0
     };
 
     const player2 = {
-      x: 130, y: 260, w: 14, h: 20,
-      vx: 0, vy: 0, speed: 2.3,
+      x: 130, y: 260, w: 14, h: 20, vx: 0, vy: 0, speed: 2.3,
       color: "#059669", helmet: "#f8fafc",
       dir: "left", animFrame: 0, animTick: 0,
-      hasWeapon: false,
-      hp: 10,
-      maxHp: 10,
-      shootCooldown: 0
+      hasWeapon: false, hp: 10, maxHp: 10, shootCooldown: 0
     };
 
     const keysDown = {};
@@ -1204,7 +1442,6 @@
       return copy;
     }
 
-    // Função que seleciona aleatoriamente 2 itens corretos e 2 incorretos do banco da sala
     function pickRandomChecklist(pool) {
       const correct = shuffleArray(pool.filter(item => item.correct)).slice(0, 2);
       const wrong = shuffleArray(pool.filter(item => !item.correct)).slice(0, 2);
@@ -1229,14 +1466,7 @@
       else if (player.dir === "up") { bvy = -bSpeed; by -= 8; }
       else { bvy = bSpeed; by += 8; }
 
-      bullets.push({
-        x: bx,
-        y: by,
-        vx: bvx,
-        vy: bvy,
-        owner: ownerId,
-        life: 70
-      });
+      bullets.push({ x: bx, y: by, vx: bvx, vy: bvy, owner: ownerId, life: 70 });
     }
 
     function updateBullets() {
@@ -1328,22 +1558,13 @@
       const MAX_DIST_Y = 270;
 
       const distX1 = (player1.x + player1.vx) - player2.x;
-      if (Math.abs(distX1) > MAX_DIST_X && (distX1 * player1.vx > 0)) {
-        player1.vx = 0;
-      }
+      if (Math.abs(distX1) > MAX_DIST_X && (distX1 * player1.vx > 0)) player1.vx = 0;
       const distX2 = (player2.x + player2.vx) - player1.x;
-      if (Math.abs(distX2) > MAX_DIST_X && (distX2 * player2.vx > 0)) {
-        player2.vx = 0;
-      }
-
+      if (Math.abs(distX2) > MAX_DIST_X && (distX2 * player2.vx > 0)) player2.vx = 0;
       const distY1 = (player1.y + player1.vy) - player2.y;
-      if (Math.abs(distY1) > MAX_DIST_Y && (distY1 * player1.vy > 0)) {
-        player1.vy = 0;
-      }
+      if (Math.abs(distY1) > MAX_DIST_Y && (distY1 * player1.vy > 0)) player1.vy = 0;
       const distY2 = (player2.y + player2.vy) - player1.y;
-      if (Math.abs(distY2) > MAX_DIST_Y && (distY2 * player2.vy > 0)) {
-        player2.vy = 0;
-      }
+      if (Math.abs(distY2) > MAX_DIST_Y && (distY2 * player2.vy > 0)) player2.vy = 0;
 
       moveWorker(player1, player2, p1Move);
       moveWorker(player2, player1, p2Move);
@@ -1378,16 +1599,12 @@
       const collidesY = other && rectOverlap(ent.x, nextY, ent.w, ent.h, other.x, other.y, other.w, other.h);
       const allowsY = !collidesY || (isCurrentlyOverlapping && Math.abs(nextY - other.y) > Math.abs(ent.y - other.y));
 
-      if (isPositionAllowed(ent.x, nextY, ent.w, ent.h) && allowsY) {
-        ent.y = nextY;
-      }
+      if (isPositionAllowed(ent.x, nextY, ent.w, ent.h) && allowsY) ent.y = nextY;
 
       const collidesX = other && rectOverlap(nextX, ent.y, ent.w, ent.h, other.x, other.y, other.w, other.h);
       const allowsX = !collidesX || (isCurrentlyOverlapping && Math.abs(nextX - other.x) > Math.abs(ent.x - other.x));
 
-      if (isPositionAllowed(nextX, ent.y, ent.w, ent.h) && allowsX) {
-        ent.x = nextX;
-      }
+      if (isPositionAllowed(nextX, ent.y, ent.w, ent.h) && allowsX) ent.x = nextX;
 
       if (ent.x < 15) ent.x = 15;
       if (ent.x > WORLD_WIDTH - ent.w - 15) ent.x = WORLD_WIDTH - ent.w - 15;
@@ -1405,26 +1622,16 @@
 
     function isPositionAllowed(x, y, w, h) {
       if (y < 205) return false;
-
-      if (y <= 330) {
-        return true;
-      }
+      if (y <= 330) return true;
 
       const inGapX = (x >= secretRoom.doorGapX1 - 2 && (x + w) <= secretRoom.doorGapX2 + 2);
-
-      if (y <= secretRoom.y + 10) {
-        return inGapX;
-      }
+      if (y <= secretRoom.y + 10) return inGapX;
 
       const inSecretRoomX = (x >= secretRoom.x + 8 && (x + w) <= secretRoom.x + secretRoom.w - 8);
       const inSecretRoomY = (y + h <= secretRoom.y + secretRoom.h - 10);
 
       if (!inSecretRoomX || !inSecretRoomY) return false;
-
-      if (y < secretRoom.y + 16 && !inGapX) {
-        return false;
-      }
-
+      if (y < secretRoom.y + 16 && !inGapX) return false;
       return true;
     }
 
@@ -1515,13 +1722,8 @@
       }
 
       drawSecretRoom();
-
-      safetyRooms.forEach(room => {
-        drawHorizontalRoom(room);
-      });
-
+      safetyRooms.forEach(room => drawHorizontalRoom(room));
       drawBullets();
-
       drawPixelWorker(player1, 1);
       drawPixelWorker(player2, 2);
 
@@ -1561,10 +1763,7 @@
     function drawSecretRoom() {
       const sr = secretRoom;
       const isPlayerInSecret = (player1.y > 330 || player2.y > 330);
-
-      if (!isPlayerInSecret && cameraY <= 2) {
-        return;
-      }
+      if (!isPlayerInSecret && cameraY <= 2) return;
 
       ctx.fillStyle = "#0a0f18";
       ctx.fillRect(sr.x, sr.y, sr.w, sr.h);
@@ -1755,211 +1954,114 @@
     }
 
     function drawPixelArtNR35(rx, ry) {
-      ctx.fillStyle = "#0369a1";
-      ctx.fillRect(rx + 12, ry + 38, 122, 142);
-      ctx.fillStyle = "#38bdf8";
-      ctx.fillRect(rx + 12, ry + 44, 122, 50);
-      ctx.fillStyle = "#bae6fd";
-      ctx.fillRect(rx + 12, ry + 40, 80, 24);
-
+      ctx.fillStyle = "#0369a1"; ctx.fillRect(rx + 12, ry + 38, 122, 142);
+      ctx.fillStyle = "#38bdf8"; ctx.fillRect(rx + 12, ry + 44, 122, 50);
+      ctx.fillStyle = "#bae6fd"; ctx.fillRect(rx + 12, ry + 40, 80, 24);
       ctx.fillStyle = "#ffffff";
       ctx.fillRect(rx + 20, ry + 56, 32, 6);
       ctx.fillRect(rx + 30, ry + 52, 20, 12);
       ctx.fillRect(rx + 76, ry + 66, 36, 6);
-
       ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
-      ctx.beginPath();
-      ctx.arc(rx + 118, ry + 42, 24, 0, Math.PI * 2);
-      ctx.fill();
-
+      ctx.beginPath(); ctx.arc(rx + 118, ry + 42, 24, 0, Math.PI * 2); ctx.fill();
       ctx.fillStyle = "#475569";
       ctx.fillRect(rx + 96, ry + 38, 6, 142);
       ctx.fillRect(rx + 122, ry + 38, 8, 142);
       ctx.fillStyle = "#64748b";
       ctx.fillRect(rx + 98, ry + 38, 2, 142);
       ctx.fillRect(rx + 124, ry + 38, 3, 142);
-
       for (let st = ry + 44; st < ry + 180; st += 12) {
-        ctx.fillStyle = "#94a3b8";
-        ctx.fillRect(rx + 102, st, 20, 3);
+        ctx.fillStyle = "#94a3b8"; ctx.fillRect(rx + 102, st, 20, 3);
       }
-
-      ctx.strokeStyle = "#cbd5e1";
-      ctx.lineWidth = 2;
+      ctx.strokeStyle = "#cbd5e1"; ctx.lineWidth = 2;
       for (let g = ry + 50; g < ry + 180; g += 26) {
         ctx.beginPath();
         ctx.arc(rx + 110, g, 20, Math.PI * 0.9, Math.PI * 1.9, false);
         ctx.stroke();
       }
+      ctx.strokeStyle = "#0f172a"; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(rx + 124, ry + 40); ctx.lineTo(rx + 20, ry + 160); ctx.stroke();
+      ctx.strokeStyle = "#334155"; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(rx + 122, ry + 40); ctx.lineTo(rx + 16, ry + 162); ctx.stroke();
 
-      ctx.strokeStyle = "#0f172a";
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.moveTo(rx + 124, ry + 40);
-      ctx.lineTo(rx + 20, ry + 160);
-      ctx.stroke();
-
-      ctx.strokeStyle = "#334155";
-      ctx.lineWidth = 1.5;
-      ctx.beginPath();
-      ctx.moveTo(rx + 122, ry + 40);
-      ctx.lineTo(rx + 16, ry + 162);
-      ctx.stroke();
-
-      const px = rx + 48;
-      const py = ry + 104;
-
+      const px = rx + 48; const py = ry + 104;
       ctx.fillStyle = "#1e293b";
       ctx.fillRect(px - 18, py + 12, 14, 8);
       ctx.fillRect(px - 28, py + 18, 12, 8);
-      ctx.fillStyle = "#a3e635";
-      ctx.fillRect(px - 26, py + 18, 5, 8);
+      ctx.fillStyle = "#a3e635"; ctx.fillRect(px - 26, py + 18, 5, 8);
       ctx.fillStyle = "#090d14";
       ctx.fillRect(px - 34, py + 22, 8, 8);
       ctx.fillRect(px - 36, py + 26, 12, 5);
-
       ctx.fillStyle = "#0f172a";
       ctx.fillRect(px - 6, py + 16, 12, 8);
       ctx.fillRect(px - 14, py + 24, 10, 8);
-      ctx.fillStyle = "#bef264";
-      ctx.fillRect(px - 12, py + 24, 5, 8);
+      ctx.fillStyle = "#bef264"; ctx.fillRect(px - 12, py + 24, 5, 8);
       ctx.fillStyle = "#090d14";
       ctx.fillRect(px - 18, py + 30, 8, 8);
       ctx.fillRect(px - 20, py + 34, 12, 5);
-
-      ctx.fillStyle = "#0284c7";
-      ctx.fillRect(px - 8, py + 6, 14, 8);
-      ctx.fillStyle = "#facc15";
-      ctx.fillRect(px - 2, py + 6, 4, 8);
-
-      ctx.fillStyle = "#84cc16";
-      ctx.fillRect(px - 6, py - 10, 18, 18);
-      ctx.fillStyle = "#65a30d";
-      ctx.fillRect(px - 4, py - 4, 16, 8);
-      ctx.fillStyle = "#f8fafc";
-      ctx.fillRect(px - 2, py - 10, 3, 14);
-      ctx.fillStyle = "#0f172a";
-      ctx.fillRect(px - 4, py - 2, 14, 3);
-
-      ctx.fillStyle = "#84cc16";
-      ctx.fillRect(px + 6, py - 18, 8, 12);
-      ctx.fillStyle = "#475569";
-      ctx.fillRect(px + 10, py - 22, 6, 6);
-
-      ctx.fillStyle = "#65a30d";
-      ctx.fillRect(px - 12, py - 8, 8, 10);
-      ctx.fillStyle = "#475569";
-      ctx.fillRect(px - 14, py, 6, 6);
-
-      ctx.fillStyle = "#facc15";
-      ctx.fillRect(px + 4, py - 4, 4, 5);
-      ctx.fillStyle = "#cbd5e1";
-      ctx.fillRect(px + 6, py - 2, 3, 4);
-
-      ctx.fillStyle = "#fed7aa";
-      ctx.fillRect(px + 2, py - 16, 8, 8);
-      ctx.fillStyle = "#0284c7";
-      ctx.fillRect(px + 3, py - 14, 8, 4);
-      ctx.fillStyle = "#ffffff";
-      ctx.fillRect(px + 1, py - 22, 12, 7);
-      ctx.fillStyle = "#94a3b8";
-      ctx.fillRect(px - 1, py - 17, 14, 3);
-      ctx.fillStyle = "#0f172a";
-      ctx.fillRect(px + 2, py - 13, 2, 5);
+      ctx.fillStyle = "#0284c7"; ctx.fillRect(px - 8, py + 6, 14, 8);
+      ctx.fillStyle = "#facc15"; ctx.fillRect(px - 2, py + 6, 4, 8);
+      ctx.fillStyle = "#84cc16"; ctx.fillRect(px - 6, py - 10, 18, 18);
+      ctx.fillStyle = "#65a30d"; ctx.fillRect(px - 4, py - 4, 16, 8);
+      ctx.fillStyle = "#f8fafc"; ctx.fillRect(px - 2, py - 10, 3, 14);
+      ctx.fillStyle = "#0f172a"; ctx.fillRect(px - 4, py - 2, 14, 3);
+      ctx.fillStyle = "#84cc16"; ctx.fillRect(px + 6, py - 18, 8, 12);
+      ctx.fillStyle = "#475569"; ctx.fillRect(px + 10, py - 22, 6, 6);
+      ctx.fillStyle = "#65a30d"; ctx.fillRect(px - 12, py - 8, 8, 10);
+      ctx.fillStyle = "#475569"; ctx.fillRect(px - 14, py, 6, 6);
+      ctx.fillStyle = "#facc15"; ctx.fillRect(px + 4, py - 4, 4, 5);
+      ctx.fillStyle = "#cbd5e1"; ctx.fillRect(px + 6, py - 2, 3, 4);
+      ctx.fillStyle = "#fed7aa"; ctx.fillRect(px + 2, py - 16, 8, 8);
+      ctx.fillStyle = "#0284c7"; ctx.fillRect(px + 3, py - 14, 8, 4);
+      ctx.fillStyle = "#ffffff"; ctx.fillRect(px + 1, py - 22, 12, 7);
+      ctx.fillStyle = "#94a3b8"; ctx.fillRect(px - 1, py - 17, 14, 3);
+      ctx.fillStyle = "#0f172a"; ctx.fillRect(px + 2, py - 13, 2, 5);
     }
 
     function drawPixelArtNR33(rx, ry) {
-      const cx = rx + 74;
-      const cy = ry + 110;
-
-      ctx.fillStyle = "#b45309";
-      ctx.beginPath();
-      ctx.arc(cx, cy, 50, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.fillStyle = "#f59e0b";
-      ctx.beginPath();
-      ctx.arc(cx, cy, 47, 0, Math.PI * 2);
-      ctx.fill();
-
+      const cx = rx + 74; const cy = ry + 110;
+      ctx.fillStyle = "#b45309"; ctx.beginPath(); ctx.arc(cx, cy, 50, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = "#f59e0b"; ctx.beginPath(); ctx.arc(cx, cy, 47, 0, Math.PI * 2); ctx.fill();
       ctx.fillStyle = "#78350f";
       for (let a = 0; a < Math.PI * 2; a += Math.PI / 6) {
-        const px = cx + Math.cos(a) * 42;
-        const py = cy + Math.sin(a) * 42;
+        const px = cx + Math.cos(a) * 42; const py = cy + Math.sin(a) * 42;
         ctx.fillRect(px - 1.5, py - 1.5, 3, 3);
       }
-
-      ctx.fillStyle = "#1e1b18";
-      ctx.beginPath();
-      ctx.arc(cx, cy, 38, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.fillStyle = "#0f172a";
-      ctx.beginPath();
-      ctx.arc(cx, cy, 32, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.fillStyle = "#facc15";
-      ctx.fillRect(cx - 21, cy - 14, 8, 18);
-      ctx.fillStyle = "#ca8a04";
-      ctx.fillRect(cx - 19, cy - 16, 4, 3);
-
+      ctx.fillStyle = "#1e1b18"; ctx.beginPath(); ctx.arc(cx, cy, 38, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = "#0f172a"; ctx.beginPath(); ctx.arc(cx, cy, 32, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = "#facc15"; ctx.fillRect(cx - 21, cy - 14, 8, 18);
+      ctx.fillStyle = "#ca8a04"; ctx.fillRect(cx - 19, cy - 16, 4, 3);
       ctx.fillStyle = "#d97706";
       ctx.fillRect(cx - 23, cy - 22, 6, 12);
       ctx.fillRect(cx - 26, cy - 27, 8, 7);
-      ctx.fillStyle = "#64748b";
-      ctx.fillRect(cx - 28, cy - 31, 10, 7);
-      ctx.fillStyle = "#94a3b8";
-      ctx.fillRect(cx - 28, cy - 31, 4, 4);
-
-      ctx.fillStyle = "#f59e0b";
-      ctx.fillRect(cx - 15, cy - 14, 18, 16);
-      ctx.fillStyle = "#d97706";
-      ctx.fillRect(cx - 13, cy - 2, 16, 6);
-
+      ctx.fillStyle = "#64748b"; ctx.fillRect(cx - 28, cy - 31, 10, 7);
+      ctx.fillStyle = "#94a3b8"; ctx.fillRect(cx - 28, cy - 31, 4, 4);
+      ctx.fillStyle = "#f59e0b"; ctx.fillRect(cx - 15, cy - 14, 18, 16);
+      ctx.fillStyle = "#d97706"; ctx.fillRect(cx - 13, cy - 2, 16, 6);
       ctx.fillStyle = "#334155";
       ctx.fillRect(cx - 13, cy - 12, 3, 16);
       ctx.fillRect(cx, cy - 12, 3, 16);
       ctx.fillRect(cx - 15, cy - 2, 18, 3);
-
       ctx.fillStyle = "#f59e0b";
       ctx.fillRect(cx + 3, cy - 14, 13, 6);
       ctx.fillRect(cx + 12, cy - 20, 6, 9);
-      ctx.fillStyle = "#64748b";
-      ctx.fillRect(cx + 11, cy - 28, 9, 10);
-      ctx.fillStyle = "#94a3b8";
-      ctx.fillRect(cx + 17, cy - 26, 4, 6);
-
-      ctx.fillStyle = "#b45309";
-      ctx.fillRect(cx - 15, cy + 4, 14, 12);
-      ctx.fillStyle = "#f59e0b";
-      ctx.fillRect(cx - 11, cy + 8, 20, 9);
-      ctx.fillStyle = "#d97706";
-      ctx.fillRect(cx + 3, cy + 13, 10, 8);
-
+      ctx.fillStyle = "#64748b"; ctx.fillRect(cx + 11, cy - 28, 9, 10);
+      ctx.fillStyle = "#94a3b8"; ctx.fillRect(cx + 17, cy - 26, 4, 6);
+      ctx.fillStyle = "#b45309"; ctx.fillRect(cx - 15, cy + 4, 14, 12);
+      ctx.fillStyle = "#f59e0b"; ctx.fillRect(cx - 11, cy + 8, 20, 9);
+      ctx.fillStyle = "#d97706"; ctx.fillRect(cx + 3, cy + 13, 10, 8);
       ctx.fillStyle = "#1e293b";
       ctx.fillRect(cx - 17, cy + 17, 10, 6);
       ctx.fillRect(cx + 1, cy + 20, 14, 6);
       ctx.fillStyle = "#94a3b8";
       ctx.fillRect(cx - 17, cy + 22, 10, 2);
       ctx.fillRect(cx + 1, cy + 24, 14, 2);
-
-      ctx.fillStyle = "#fed7aa";
-      ctx.fillRect(cx - 4, cy - 21, 8, 8);
-
-      ctx.fillStyle = "#ea580c";
-      ctx.fillRect(cx - 7, cy - 29, 14, 6);
-      ctx.fillStyle = "#c2410c";
-      ctx.fillRect(cx - 9, cy - 25, 18, 3);
-      ctx.fillStyle = "#fef08a";
-      ctx.fillRect(cx + 5, cy - 29, 4, 4);
-      ctx.fillStyle = "#ffffff";
-      ctx.fillRect(cx + 7, cy - 28, 2, 2);
-
-      ctx.fillStyle = "#334155";
-      ctx.fillRect(cx - 2, cy - 23, 10, 11);
-      ctx.fillStyle = "#67e8f9";
-      ctx.fillRect(cx + 2, cy - 22, 5, 4);
+      ctx.fillStyle = "#fed7aa"; ctx.fillRect(cx - 4, cy - 21, 8, 8);
+      ctx.fillStyle = "#ea580c"; ctx.fillRect(cx - 7, cy - 29, 14, 6);
+      ctx.fillStyle = "#c2410c"; ctx.fillRect(cx - 9, cy - 25, 18, 3);
+      ctx.fillStyle = "#fef08a"; ctx.fillRect(cx + 5, cy - 29, 4, 4);
+      ctx.fillStyle = "#ffffff"; ctx.fillRect(cx + 7, cy - 28, 2, 2);
+      ctx.fillStyle = "#334155"; ctx.fillRect(cx - 2, cy - 23, 10, 11);
+      ctx.fillStyle = "#67e8f9"; ctx.fillRect(cx + 2, cy - 22, 5, 4);
       ctx.fillStyle = "#0f172a";
       ctx.fillRect(cx, cy - 13, 5, 4);
       ctx.fillRect(cx - 5, cy - 10, 6, 3);
@@ -1967,403 +2069,224 @@
     }
 
     function drawPixelArtNR10(rx, ry) {
-      ctx.fillStyle = "#1e293b";
-      ctx.fillRect(rx + 12, ry + 38, 122, 142);
-      ctx.fillStyle = "#334155";
-      ctx.fillRect(rx + 12, ry + 38, 122, 10);
-
-      ctx.fillStyle = "#cbd5e1";
-      ctx.fillRect(rx + 16, ry + 42, 48, 134);
-      ctx.strokeStyle = "#475569";
-      ctx.lineWidth = 2;
+      ctx.fillStyle = "#1e293b"; ctx.fillRect(rx + 12, ry + 38, 122, 142);
+      ctx.fillStyle = "#334155"; ctx.fillRect(rx + 12, ry + 38, 122, 10);
+      ctx.fillStyle = "#cbd5e1"; ctx.fillRect(rx + 16, ry + 42, 48, 134);
+      ctx.strokeStyle = "#475569"; ctx.lineWidth = 2;
       ctx.strokeRect(rx + 16, ry + 42, 48, 134);
-
-      ctx.fillStyle = "#f8fafc";
-      ctx.fillRect(rx + 20, ry + 48, 18, 12);
+      ctx.fillStyle = "#f8fafc"; ctx.fillRect(rx + 20, ry + 48, 18, 12);
       ctx.fillStyle = "#334155";
       ctx.fillRect(rx + 22, ry + 44, 2, 5);
       ctx.fillRect(rx + 34, ry + 44, 2, 5);
-
       ctx.fillStyle = "#94a3b8";
       ctx.fillRect(rx + 20, ry + 64, 40, 3);
       ctx.fillRect(rx + 20, ry + 86, 40, 3);
-
       const cbColors = ["#ffffff", "#0284c7", "#ef4444", "#ffffff", "#1e293b", "#ef4444"];
       cbColors.forEach((col, i) => {
-        ctx.fillStyle = col;
-        ctx.fillRect(rx + 22 + (i * 6), ry + 68, 5, 14);
-        ctx.fillStyle = "#000";
-        ctx.fillRect(rx + 23 + (i * 6), ry + 73, 3, 4);
+        ctx.fillStyle = col; ctx.fillRect(rx + 22 + (i * 6), ry + 68, 5, 14);
+        ctx.fillStyle = "#000"; ctx.fillRect(rx + 23 + (i * 6), ry + 73, 3, 4);
       });
-
-      ctx.fillStyle = "#090d14";
-      ctx.fillRect(rx + 22, ry + 94, 22, 10);
-      ctx.fillStyle = "#ef4444";
-      ctx.font = "7px 'Press Start 2P'";
+      ctx.fillStyle = "#090d14"; ctx.fillRect(rx + 22, ry + 94, 22, 10);
+      ctx.fillStyle = "#ef4444"; ctx.font = "7px 'Press Start 2P'";
       ctx.fillText("220", rx + 24, ry + 102);
+      ctx.strokeStyle = "#0f172a"; ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.arc(rx + 38, ry + 138, 16, 0, Math.PI * 2); ctx.stroke();
+      ctx.strokeStyle = "#facc15"; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.arc(rx + 38, ry + 138, 11, 0, Math.PI * 2); ctx.stroke();
 
-      ctx.strokeStyle = "#0f172a";
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      ctx.arc(rx + 38, ry + 138, 16, 0, Math.PI * 2);
-      ctx.stroke();
-      ctx.strokeStyle = "#facc15";
-      ctx.lineWidth = 1.5;
-      ctx.beginPath();
-      ctx.arc(rx + 38, ry + 138, 11, 0, Math.PI * 2);
-      ctx.stroke();
-
-      const ex = rx + 82;
-      const ey = ry + 92;
-
-      ctx.fillStyle = "#64748b";
-      ctx.fillRect(ex - 8, ey + 4, 28, 44);
-      ctx.fillStyle = "#475569";
-      ctx.fillRect(ex - 6, ey + 24, 26, 24);
-
-      ctx.fillStyle = "#64748b";
-      ctx.fillRect(ex - 16, ey + 8, 10, 16);
-      ctx.fillStyle = "#0284c7";
-      ctx.fillRect(ex - 22, ey + 22, 12, 4);
-      ctx.fillStyle = "#0f172a";
-      ctx.fillRect(ex - 24, ey + 26, 12, 10);
-
-      ctx.fillStyle = "#dc2626";
-      ctx.fillRect(ex - 30, ey + 18, 14, 24);
-      ctx.fillStyle = "#ef4444";
-      ctx.fillRect(ex - 28, ey + 20, 10, 8);
-      ctx.fillStyle = "#090d14";
-      ctx.fillRect(ex - 27, ey + 22, 8, 4);
-      ctx.fillStyle = "#facc15";
-      ctx.fillRect(ex - 25, ey + 32, 4, 4);
-
+      const ex = rx + 82; const ey = ry + 92;
+      ctx.fillStyle = "#64748b"; ctx.fillRect(ex - 8, ey + 4, 28, 44);
+      ctx.fillStyle = "#475569"; ctx.fillRect(ex - 6, ey + 24, 26, 24);
+      ctx.fillStyle = "#64748b"; ctx.fillRect(ex - 16, ey + 8, 10, 16);
+      ctx.fillStyle = "#0284c7"; ctx.fillRect(ex - 22, ey + 22, 12, 4);
+      ctx.fillStyle = "#0f172a"; ctx.fillRect(ex - 24, ey + 26, 12, 10);
+      ctx.fillStyle = "#dc2626"; ctx.fillRect(ex - 30, ey + 18, 14, 24);
+      ctx.fillStyle = "#ef4444"; ctx.fillRect(ex - 28, ey + 20, 10, 8);
+      ctx.fillStyle = "#090d14"; ctx.fillRect(ex - 27, ey + 22, 8, 4);
+      ctx.fillStyle = "#facc15"; ctx.fillRect(ex - 25, ey + 32, 4, 4);
       ctx.fillStyle = "#64748b";
       ctx.fillRect(ex - 4, ey + 6, 12, 8);
       ctx.fillRect(ex - 14, ey + 8, 12, 7);
-      ctx.fillStyle = "#0284c7";
-      ctx.fillRect(ex - 18, ey + 9, 4, 6);
-      ctx.fillStyle = "#0f172a";
-      ctx.fillRect(ex - 26, ey + 9, 8, 6);
-
-      ctx.fillStyle = "#dc2626";
-      ctx.fillRect(ex - 38, ey + 11, 12, 3);
-      ctx.fillStyle = "#cbd5e1";
-      ctx.fillRect(ex - 44, ey + 12, 6, 1);
-
-      ctx.strokeStyle = "#dc2626";
-      ctx.lineWidth = 1;
+      ctx.fillStyle = "#0284c7"; ctx.fillRect(ex - 18, ey + 9, 4, 6);
+      ctx.fillStyle = "#0f172a"; ctx.fillRect(ex - 26, ey + 9, 8, 6);
+      ctx.fillStyle = "#dc2626"; ctx.fillRect(ex - 38, ey + 11, 12, 3);
+      ctx.fillStyle = "#cbd5e1"; ctx.fillRect(ex - 44, ey + 12, 6, 1);
+      ctx.strokeStyle = "#dc2626"; ctx.lineWidth = 1;
       ctx.beginPath();
       ctx.moveTo(ex - 26, ey + 40);
       ctx.bezierCurveTo(ex - 36, ey + 44, ex - 42, ey + 24, ex - 34, ey + 13);
       ctx.stroke();
-
-      ctx.fillStyle = "#fed7aa";
-      ctx.fillRect(ex - 2, ey - 14, 18, 18);
-      ctx.fillStyle = "#78350f";
-      ctx.fillRect(ex - 4, ey - 4, 12, 8);
-      ctx.fillStyle = "#0f172a";
-      ctx.fillRect(ex - 6, ey - 12, 12, 5);
-      ctx.fillStyle = "#38bdf8";
-      ctx.fillRect(ex - 5, ey - 11, 8, 3);
-
-      ctx.fillStyle = "#ffffff";
-      ctx.fillRect(ex - 6, ey - 24, 24, 11);
-      ctx.fillStyle = "#cbd5e1";
-      ctx.fillRect(ex - 10, ey - 15, 28, 4);
+      ctx.fillStyle = "#fed7aa"; ctx.fillRect(ex - 2, ey - 14, 18, 18);
+      ctx.fillStyle = "#78350f"; ctx.fillRect(ex - 4, ey - 4, 12, 8);
+      ctx.fillStyle = "#0f172a"; ctx.fillRect(ex - 6, ey - 12, 12, 5);
+      ctx.fillStyle = "#38bdf8"; ctx.fillRect(ex - 5, ey - 11, 8, 3);
+      ctx.fillStyle = "#ffffff"; ctx.fillRect(ex - 6, ey - 24, 24, 11);
+      ctx.fillStyle = "#cbd5e1"; ctx.fillRect(ex - 10, ey - 15, 28, 4);
     }
 
     function drawPixelArtNR12(rx, ry) {
-      ctx.fillStyle = "#1e293b";
-      ctx.fillRect(rx + 12, ry + 38, 122, 142);
+      ctx.fillStyle = "#1e293b"; ctx.fillRect(rx + 12, ry + 38, 122, 142);
       ctx.fillStyle = "#1d4ed8";
       ctx.fillRect(rx + 16, ry + 38, 8, 142);
       ctx.fillRect(rx + 118, ry + 38, 8, 142);
       ctx.fillRect(rx + 16, ry + 62, 110, 6);
-
-      ctx.fillStyle = "#ca8a04";
-      ctx.fillRect(rx + 62, ry + 42, 28, 12);
-      ctx.fillStyle = "#eab308";
-      ctx.fillRect(rx + 66, ry + 54, 20, 24);
-      ctx.fillStyle = "#fde047";
-      ctx.fillRect(rx + 68, ry + 56, 6, 20);
-      ctx.fillStyle = "#475569";
-      ctx.fillRect(rx + 74, ry + 78, 5, 14);
-
-      ctx.fillStyle = "#334155";
-      ctx.fillRect(rx + 20, ry + 124, 106, 26);
+      ctx.fillStyle = "#ca8a04"; ctx.fillRect(rx + 62, ry + 42, 28, 12);
+      ctx.fillStyle = "#eab308"; ctx.fillRect(rx + 66, ry + 54, 20, 24);
+      ctx.fillStyle = "#fde047"; ctx.fillRect(rx + 68, ry + 56, 6, 20);
+      ctx.fillStyle = "#475569"; ctx.fillRect(rx + 74, ry + 78, 5, 14);
+      ctx.fillStyle = "#334155"; ctx.fillRect(rx + 20, ry + 124, 106, 26);
       ctx.fillStyle = "#facc15";
       ctx.fillRect(rx + 24, ry + 118, 98, 4);
       ctx.fillRect(rx + 24, ry + 118, 4, 24);
       ctx.fillRect(rx + 118, ry + 118, 4, 24);
-
-      const w1x = rx + 36;
-      const w1y = ry + 104;
-
+      const w1x = rx + 36; const w1y = ry + 104;
       ctx.fillStyle = "#1e40af";
       ctx.fillRect(w1x - 5, w1y + 24, 6, 24);
       ctx.fillRect(w1x + 2, w1y + 24, 6, 24);
       ctx.fillStyle = "#090d14";
       ctx.fillRect(w1x - 6, w1y + 44, 7, 5);
       ctx.fillRect(w1x + 2, w1y + 44, 7, 5);
-
-      ctx.fillStyle = "#2563eb";
-      ctx.fillRect(w1x - 7, w1y, 16, 24);
-      ctx.fillStyle = "#ffffff";
-      ctx.fillRect(w1x - 7, w1y + 8, 16, 3);
-
-      ctx.fillStyle = "#1d4ed8";
-      ctx.fillRect(w1x + 7, w1y + 2, 7, 10);
-      ctx.fillStyle = "#fed7aa";
-      ctx.fillRect(w1x + 12, w1y - 2, 4, 5);
-      ctx.fillStyle = "#dc2626";
-      ctx.fillRect(w1x + 14, w1y - 6, 5, 8);
-      ctx.fillStyle = "#000000";
-      ctx.fillRect(w1x + 17, w1y - 12, 1, 6);
-
-      ctx.fillStyle = "#451a03";
-      ctx.fillRect(w1x - 5, w1y - 10, 11, 10);
-      ctx.fillStyle = "#ffffff";
-      ctx.fillRect(w1x - 6, w1y - 18, 13, 9);
-      ctx.fillStyle = "#cbd5e1";
-      ctx.fillRect(w1x - 8, w1y - 11, 16, 3);
-
-      const w2x = rx + 98;
-      const w2y = ry + 94;
-
+      ctx.fillStyle = "#2563eb"; ctx.fillRect(w1x - 7, w1y, 16, 24);
+      ctx.fillStyle = "#ffffff"; ctx.fillRect(w1x - 7, w1y + 8, 16, 3);
+      ctx.fillStyle = "#1d4ed8"; ctx.fillRect(w1x + 7, w1y + 2, 7, 10);
+      ctx.fillStyle = "#fed7aa"; ctx.fillRect(w1x + 12, w1y - 2, 4, 5);
+      ctx.fillStyle = "#dc2626"; ctx.fillRect(w1x + 14, w1y - 6, 5, 8);
+      ctx.fillStyle = "#000000"; ctx.fillRect(w1x + 17, w1y - 12, 1, 6);
+      ctx.fillStyle = "#451a03"; ctx.fillRect(w1x - 5, w1y - 10, 11, 10);
+      ctx.fillStyle = "#ffffff"; ctx.fillRect(w1x - 6, w1y - 18, 13, 9);
+      ctx.fillStyle = "#cbd5e1"; ctx.fillRect(w1x - 8, w1y - 11, 16, 3);
+      const w2x = rx + 98; const w2y = ry + 94;
       ctx.fillStyle = "#1e40af";
       ctx.fillRect(w2x - 5, w2y + 32, 6, 24);
       ctx.fillRect(w2x + 3, w2y + 32, 6, 24);
       ctx.fillStyle = "#090d14";
       ctx.fillRect(w2x - 6, w2y + 52, 7, 5);
       ctx.fillRect(w2x + 3, w2y + 52, 7, 5);
-
-      ctx.fillStyle = "#2563eb";
-      ctx.fillRect(w2x - 7, w2y + 8, 16, 24);
-      ctx.fillStyle = "#ffffff";
-      ctx.fillRect(w2x - 7, w2y + 16, 16, 3);
-
-      ctx.fillStyle = "#1d4ed8";
-      ctx.fillRect(w2x - 8, w2y - 4, 6, 14);
-      ctx.fillStyle = "#2563eb";
-      ctx.fillRect(w2x - 12, w2y - 16, 6, 14);
-      ctx.fillStyle = "#fed7aa";
-      ctx.fillRect(w2x - 14, w2y - 20, 5, 5);
-
-      ctx.fillStyle = "#fed7aa";
-      ctx.fillRect(w2x - 4, w2y - 3, 10, 11);
-      ctx.fillStyle = "#ffffff";
-      ctx.fillRect(w2x - 6, w2y - 11, 14, 9);
-      ctx.fillStyle = "#cbd5e1";
-      ctx.fillRect(w2x - 8, w2y - 4, 16, 3);
+      ctx.fillStyle = "#2563eb"; ctx.fillRect(w2x - 7, w2y + 8, 16, 24);
+      ctx.fillStyle = "#ffffff"; ctx.fillRect(w2x - 7, w2y + 16, 16, 3);
+      ctx.fillStyle = "#1d4ed8"; ctx.fillRect(w2x - 8, w2y - 4, 6, 14);
+      ctx.fillStyle = "#2563eb"; ctx.fillRect(w2x - 12, w2y - 16, 6, 14);
+      ctx.fillStyle = "#fed7aa"; ctx.fillRect(w2x - 14, w2y - 20, 5, 5);
+      ctx.fillStyle = "#fed7aa"; ctx.fillRect(w2x - 4, w2y - 3, 10, 11);
+      ctx.fillStyle = "#ffffff"; ctx.fillRect(w2x - 6, w2y - 11, 14, 9);
+      ctx.fillStyle = "#cbd5e1"; ctx.fillRect(w2x - 8, w2y - 4, 16, 3);
     }
 
     function drawPixelArtNR20(rx, ry) {
-      ctx.fillStyle = "#1e293b";
-      ctx.fillRect(rx + 12, ry + 38, 122, 142);
-      ctx.fillStyle = "#334155";
-      ctx.fillRect(rx + 12, ry + 38, 122, 8);
-
-      ctx.fillStyle = "#64748b";
-      ctx.fillRect(rx + 16, ry + 52, 46, 100);
-      ctx.fillStyle = "#94a3b8";
-      ctx.fillRect(rx + 22, ry + 52, 28, 100);
-      ctx.fillStyle = "#cbd5e1";
-      ctx.fillRect(rx + 26, ry + 52, 8, 100);
-
-      ctx.beginPath();
-      ctx.arc(rx + 39, ry + 52, 23, Math.PI, 0, false);
-      ctx.fillStyle = "#64748b";
-      ctx.fill();
-
-      ctx.fillStyle = "#475569";
-      ctx.fillRect(rx + 37, ry + 24, 4, 8);
-      ctx.fillStyle = "#dc2626";
-      ctx.fillRect(rx + 35, ry + 22, 8, 3);
-
-      ctx.fillStyle = "#334155";
-      ctx.fillRect(rx + 96, ry + 64, 30, 90);
-      ctx.fillStyle = "#475569";
-      ctx.fillRect(rx + 102, ry + 64, 14, 90);
-      ctx.beginPath();
-      ctx.arc(rx + 111, ry + 64, 15, Math.PI, 0, false);
-      ctx.fillStyle = "#334155";
-      ctx.fill();
-      ctx.fillStyle = "#ca8a04";
-      ctx.fillRect(rx + 109, ry + 44, 4, 6);
-
+      ctx.fillStyle = "#1e293b"; ctx.fillRect(rx + 12, ry + 38, 122, 142);
+      ctx.fillStyle = "#334155"; ctx.fillRect(rx + 12, ry + 38, 122, 8);
+      ctx.fillStyle = "#64748b"; ctx.fillRect(rx + 16, ry + 52, 46, 100);
+      ctx.fillStyle = "#94a3b8"; ctx.fillRect(rx + 22, ry + 52, 28, 100);
+      ctx.fillStyle = "#cbd5e1"; ctx.fillRect(rx + 26, ry + 52, 8, 100);
+      ctx.beginPath(); ctx.arc(rx + 39, ry + 52, 23, Math.PI, 0, false);
+      ctx.fillStyle = "#64748b"; ctx.fill();
+      ctx.fillStyle = "#475569"; ctx.fillRect(rx + 37, ry + 24, 4, 8);
+      ctx.fillStyle = "#dc2626"; ctx.fillRect(rx + 35, ry + 22, 8, 3);
+      ctx.fillStyle = "#334155"; ctx.fillRect(rx + 96, ry + 64, 30, 90);
+      ctx.fillStyle = "#475569"; ctx.fillRect(rx + 102, ry + 64, 14, 90);
+      ctx.beginPath(); ctx.arc(rx + 111, ry + 64, 15, Math.PI, 0, false);
+      ctx.fillStyle = "#334155"; ctx.fill();
+      ctx.fillStyle = "#ca8a04"; ctx.fillRect(rx + 109, ry + 44, 4, 6);
       ctx.fillStyle = "#ef4444";
       ctx.beginPath();
       ctx.moveTo(rx + 39, ry + 82);
       ctx.lineTo(rx + 47, ry + 90);
       ctx.lineTo(rx + 39, ry + 98);
       ctx.lineTo(rx + 31, ry + 90);
-      ctx.closePath();
-      ctx.fill();
-
-      ctx.fillStyle = "#fef08a";
-      ctx.fillRect(rx + 38, ry + 88, 3, 5);
-
-      const ix = rx + 68;
-      const iy = ry + 92;
-
-      ctx.fillStyle = "#cbd5e1";
-      ctx.fillRect(ix - 12, iy + 6, 26, 42);
-
-      ctx.fillStyle = "#84cc16";
-      ctx.fillRect(ix - 12, iy + 8, 26, 34);
-      ctx.fillStyle = "#a3e635";
-      ctx.fillRect(ix - 8, iy + 8, 18, 34);
-
+      ctx.closePath(); ctx.fill();
+      ctx.fillStyle = "#fef08a"; ctx.fillRect(rx + 38, ry + 88, 3, 5);
+      const ix = rx + 68; const iy = ry + 92;
+      ctx.fillStyle = "#cbd5e1"; ctx.fillRect(ix - 12, iy + 6, 26, 42);
+      ctx.fillStyle = "#84cc16"; ctx.fillRect(ix - 12, iy + 8, 26, 34);
+      ctx.fillStyle = "#a3e635"; ctx.fillRect(ix - 8, iy + 8, 18, 34);
       ctx.fillStyle = "#ffffff";
       ctx.fillRect(ix - 12, iy + 22, 26, 4);
       ctx.fillRect(ix - 12, iy + 34, 26, 4);
-
       ctx.fillStyle = "#cbd5e1";
       ctx.fillRect(ix - 16, iy + 14, 8, 16);
       ctx.fillRect(ix + 10, iy + 14, 8, 16);
-
       ctx.fillStyle = "#0f172a";
       ctx.fillRect(ix - 10, iy + 26, 7, 8);
       ctx.fillRect(ix + 5, iy + 26, 7, 8);
-
-      ctx.fillStyle = "#020617";
-      ctx.fillRect(ix - 8, iy + 20, 18, 22);
-      ctx.fillStyle = "#38bdf8";
-      ctx.fillRect(ix - 6, iy + 22, 14, 18);
-
+      ctx.fillStyle = "#020617"; ctx.fillRect(ix - 8, iy + 20, 18, 22);
+      ctx.fillStyle = "#38bdf8"; ctx.fillRect(ix - 6, iy + 22, 14, 18);
       ctx.fillStyle = "#ffffff";
       ctx.fillRect(ix - 4, iy + 24, 10, 2);
       ctx.fillRect(ix - 4, iy + 28, 8, 2);
       ctx.fillRect(ix - 4, iy + 32, 10, 2);
-
-      ctx.fillStyle = "#fed7aa";
-      ctx.fillRect(ix - 6, iy - 12, 14, 18);
-
-      ctx.fillStyle = "#0f172a";
-      ctx.fillRect(ix - 8, iy - 8, 18, 5);
-      ctx.fillStyle = "#67e8f9";
-      ctx.fillRect(ix - 7, iy - 7, 14, 3);
-
-      ctx.fillStyle = "#ffffff";
-      ctx.fillRect(ix - 9, iy - 22, 20, 11);
-      ctx.fillStyle = "#cbd5e1";
-      ctx.fillRect(ix - 12, iy - 13, 26, 4);
+      ctx.fillStyle = "#fed7aa"; ctx.fillRect(ix - 6, iy - 12, 14, 18);
+      ctx.fillStyle = "#0f172a"; ctx.fillRect(ix - 8, iy - 8, 18, 5);
+      ctx.fillStyle = "#67e8f9"; ctx.fillRect(ix - 7, iy - 7, 14, 3);
+      ctx.fillStyle = "#ffffff"; ctx.fillRect(ix - 9, iy - 22, 20, 11);
+      ctx.fillStyle = "#cbd5e1"; ctx.fillRect(ix - 12, iy - 13, 26, 4);
     }
 
     function drawThemeDecorations(room) {
-      const rx = room.roomX;
-      const ry = room.roomY;
-
+      const rx = room.roomX; const ry = room.roomY;
       if (room.decor === "scaffold") {
         drawPixelArtNR35(rx, ry);
-        drawIndustrialSign(
-          rx + 138, ry + 118, 134, 58,
-          "#facc15", "#000000", "⚠ TRABALHO EM ALTURA",
-          [
-            { text: "• PISO ELEVADO: 8 METROS", color: "#facc15" },
-            { text: "• TALABARTE DUPLO EM Y", color: "#ffffff" },
-            { text: "• LINHA DE VIDA OBRIG.", color: "#38bdf8" }
-          ],
-          "#facc15"
-        );
+        drawIndustrialSign(rx + 138, ry + 118, 134, 58, "#facc15", "#000000", "⚠ TRABALHO EM ALTURA",
+          [{ text: "• PISO ELEVADO: 8 METROS", color: "#facc15" },
+           { text: "• TALABARTE DUPLO EM Y", color: "#ffffff" },
+           { text: "• LINHA DE VIDA OBRIG.", color: "#38bdf8" }], "#facc15");
       } else if (room.decor === "manhole") {
         drawPixelArtNR33(rx, ry);
-        drawIndustrialSign(
-          rx + 138, ry + 118, 134, 58,
-          "#38bdf8", "#000000", "⚠ ESPAÇO CONFINADO",
-          [
-            { text: "• MEDIÇÃO DE H2S / CO", color: "#38bdf8" },
-            { text: "• EMISSÃO FORMAL DE PET", color: "#ffffff" },
-            { text: "• VIGIA EXTERNO RESGATE", color: "#facc15" }
-          ],
-          "#38bdf8"
-        );
+        drawIndustrialSign(rx + 138, ry + 118, 134, 58, "#38bdf8", "#000000", "⚠ ESPAÇO CONFINADO",
+          [{ text: "• MEDIÇÃO DE H2S / CO", color: "#38bdf8" },
+           { text: "• EMISSÃO FORMAL DE PET", color: "#ffffff" },
+           { text: "• VIGIA EXTERNO RESGATE", color: "#facc15" }], "#38bdf8");
       } else if (room.decor === "transformer") {
         drawPixelArtNR10(rx, ry);
-        drawIndustrialSign(
-          rx + 138, ry + 118, 134, 58,
-          "#ea580c", "#ffffff", "⚠ PERIGO: ALTA TENSÃO",
-          [
-            { text: "• BARRAMENTO 13.800V", color: "#facc15" },
-            { text: "• BLOQUEIO LOTO OBRIG.", color: "#ffffff" },
-            { text: "• TESTE DE TENSÃO/TERRA", color: "#93c5fd" }
-          ],
-          "#fb923c"
-        );
+        drawIndustrialSign(rx + 138, ry + 118, 134, 58, "#ea580c", "#ffffff", "⚠ PERIGO: ALTA TENSÃO",
+          [{ text: "• BARRAMENTO 13.800V", color: "#facc15" },
+           { text: "• BLOQUEIO LOTO OBRIG.", color: "#ffffff" },
+           { text: "• TESTE DE TENSÃO/TERRA", color: "#93c5fd" }], "#fb923c");
       } else if (room.decor === "press") {
         drawPixelArtNR12(rx, ry);
-        drawIndustrialSign(
-          rx + 138, ry + 118, 134, 58,
-          "#dc2626", "#ffffff", "⚠ RISCO DE PRENSAGEM",
-          [
-            { text: "• CORTINA ÓPTICA ATIVA", color: "#facc15" },
-            { text: "• PROIBIDO BURLAR TRAVAS", color: "#ffffff" },
-            { text: "• CALÇO MECÂNICO OBRIG.", color: "#f87171" }
-          ],
-          "#f87171"
-        );
+        drawIndustrialSign(rx + 138, ry + 118, 134, 58, "#dc2626", "#ffffff", "⚠ RISCO DE PRENSAGEM",
+          [{ text: "• CORTINA ÓPTICA ATIVA", color: "#facc15" },
+           { text: "• PROIBIDO BURLAR TRAVAS", color: "#ffffff" },
+           { text: "• CALÇO MECÂNICO OBRIG.", color: "#f87171" }], "#f87171");
       } else if (room.decor === "barrels") {
         drawPixelArtNR20(rx, ry);
-        drawIndustrialSign(
-          rx + 138, ry + 118, 134, 58,
-          "#10b981", "#000000", "⚠ LÍQUIDOS INFLAMÁVEIS",
-          [
-            { text: "• PRODUTOS VOLÁTEIS", color: "#f87171" },
-            { text: "• FDS/FISPQ OBRIGATÓRIA", color: "#ffffff" },
-            { text: "• ATERRAMENTO ESTÁTICO", color: "#4ade80" }
-          ],
-          "#10b981"
-        );
+        drawIndustrialSign(rx + 138, ry + 118, 134, 58, "#10b981", "#000000", "⚠ LÍQUIDOS INFLAMÁVEIS",
+          [{ text: "• PRODUTOS VOLÁTEIS", color: "#f87171" },
+           { text: "• FDS/FISPQ OBRIGATÓRIA", color: "#ffffff" },
+           { text: "• ATERRAMENTO ESTÁTICO", color: "#4ade80" }], "#10b981");
       }
     }
 
     function drawPixelWorker(p, id) {
       ctx.save();
       ctx.translate(Math.round(p.x), Math.round(p.y));
-
       const bob = (p.animFrame % 2 === 1) ? -1 : 0;
 
       ctx.fillStyle = "rgba(0, 0, 0, 0.45)";
-      ctx.beginPath();
-      ctx.ellipse(7, 20, 7, 3, 0, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.beginPath(); ctx.ellipse(7, 20, 7, 3, 0, 0, Math.PI * 2); ctx.fill();
 
       ctx.fillStyle = "#1e293b";
       if (p.animFrame === 1) {
-        ctx.fillRect(2, 14, 4, 6);
-        ctx.fillRect(8, 13, 4, 5);
+        ctx.fillRect(2, 14, 4, 6); ctx.fillRect(8, 13, 4, 5);
       } else if (p.animFrame === 3) {
-        ctx.fillRect(2, 13, 4, 5);
-        ctx.fillRect(8, 14, 4, 6);
+        ctx.fillRect(2, 13, 4, 5); ctx.fillRect(8, 14, 4, 6);
       } else {
-        ctx.fillRect(2, 14, 4, 6);
-        ctx.fillRect(8, 14, 4, 6);
+        ctx.fillRect(2, 14, 4, 6); ctx.fillRect(8, 14, 4, 6);
       }
 
-      ctx.fillStyle = p.color;
-      ctx.fillRect(2, 8 + bob, 10, 7);
-
-      ctx.fillStyle = "#facc15";
-      ctx.fillRect(4, 9 + bob, 6, 5);
-
-      ctx.fillStyle = "#fed7aa";
-      ctx.fillRect(4, 3 + bob, 6, 6);
-
+      ctx.fillStyle = p.color; ctx.fillRect(2, 8 + bob, 10, 7);
+      ctx.fillStyle = "#facc15"; ctx.fillRect(4, 9 + bob, 6, 5);
+      ctx.fillStyle = "#fed7aa"; ctx.fillRect(4, 3 + bob, 6, 6);
       ctx.fillStyle = p.helmet;
       ctx.fillRect(2, 0 + bob, 10, 4);
       ctx.fillRect(1, 3 + bob, 12, 2);
-
-      ctx.fillStyle = "#38bdf8";
-      ctx.fillRect(4, 5 + bob, 6, 2);
+      ctx.fillStyle = "#38bdf8"; ctx.fillRect(4, 5 + bob, 6, 2);
 
       if (p.hasWeapon) {
         ctx.fillStyle = "#000000";
         if (p.dir === "right") {
-          ctx.fillRect(10, 11 + bob, 7, 3);
-          ctx.fillRect(10, 13 + bob, 2, 3);
+          ctx.fillRect(10, 11 + bob, 7, 3); ctx.fillRect(10, 13 + bob, 2, 3);
         } else if (p.dir === "left") {
-          ctx.fillRect(-3, 11 + bob, 7, 3);
-          ctx.fillRect(2, 13 + bob, 2, 3);
+          ctx.fillRect(-3, 11 + bob, 7, 3); ctx.fillRect(2, 13 + bob, 2, 3);
         } else if (p.dir === "up") {
           ctx.fillRect(10, 5 + bob, 3, 6);
         } else {
@@ -2371,13 +2294,8 @@
         }
       }
 
-      const barW = 20;
-      const barH = 3;
-      const barX = -3;
-      const barY = -8 + bob;
-
-      ctx.fillStyle = "#000000";
-      ctx.fillRect(barX, barY, barW, barH);
+      const barW = 20; const barH = 3; const barX = -3; const barY = -8 + bob;
+      ctx.fillStyle = "#000000"; ctx.fillRect(barX, barY, barW, barH);
       const hpPct = Math.max(0, p.hp / p.maxHp);
       ctx.fillStyle = hpPct <= 0.3 ? '#f87171' : (hpPct <= 0.6 ? '#facc15' : '#4ade80');
       ctx.fillRect(barX, barY, Math.round(barW * hpPct), barH);
@@ -2392,7 +2310,6 @@
       }
     }
 
-    // Abertura do desafio com sorteio aleatório (2 certas e 2 erradas para cada participante)
     function openRoomChallenge(room) {
       gameState = "CHECKLIST";
       currentRoom = room;
@@ -2406,7 +2323,6 @@
       p2Selected.clear();
       updateChecklistUI();
 
-      // Sorteia dinamicamente do banco de 10 perguntas de cada participante
       activeShuffledP1 = pickRandomChecklist(room.p1Pool);
       activeShuffledP2 = pickRandomChecklist(room.p2Pool);
 
@@ -2596,8 +2512,7 @@
 
       player1.x = 100; player1.y = 260;
       player2.x = 130; player2.y = 260;
-      cameraX = 0;
-      cameraY = 0;
+      cameraX = 0; cameraY = 0;
     }
 
     function backToMainMenu() {
@@ -2693,9 +2608,396 @@
       c2.fillStyle = "#38bdf8"; c2.fillRect(10, 10, 12, 3);
     }
 
+    // =========================================================================
+    // SISTEMA DE TELA DE ABERTURA / TRAILER — COM ÁUDIO CORRIGIDO
+    // =========================================================================
+    const INTRO_STORAGE_KEY = 'protocoloDuplo_skipIntro';
+    let introSkipRequested = false;
+    let introVideoEl = null;
+    let introLoadCheckInterval = null;
+
+    function shouldSkipIntro() {
+      try {
+        return localStorage.getItem(INTRO_STORAGE_KEY) === 'true';
+      } catch (e) {
+        return false;
+      }
+    }
+
+    function setSkipIntroFlag(value) {
+      try {
+        if (value) {
+          localStorage.setItem(INTRO_STORAGE_KEY, 'true');
+        } else {
+          localStorage.removeItem(INTRO_STORAGE_KEY);
+        }
+      } catch (e) {}
+    }
+
+    function transitionIntroToMenu() {
+      if (introSkipRequested) return;
+      introSkipRequested = true;
+
+      if (introVideoEl) {
+        try { introVideoEl.pause(); } catch (e) {}
+      }
+
+      clearInterval(introLoadCheckInterval);
+
+      const introScreen = document.getElementById('introScreen');
+      const titleScreen = document.getElementById('titleScreen');
+
+      introScreen.classList.add('intro-fade-out');
+
+      setTimeout(() => {
+        introScreen.classList.remove('active', 'intro-fade-out');
+        introScreen.classList.add('hidden');
+
+        titleScreen.classList.remove('hidden');
+        titleScreen.classList.add('active', 'intro-fade-in');
+
+        setTimeout(() => {
+          titleScreen.classList.remove('intro-fade-in');
+        }, 600);
+
+        gameState = "MENU";
+      }, 600);
+    }
+
+    function showIntroVideo() {
+      document.getElementById('introLoading').classList.add('hidden');
+      document.getElementById('introVideoLayer').classList.remove('hidden');
+      document.getElementById('introVideoLayer').classList.add('intro-fade-in');
+    }
+
+    function showIntroFallback() {
+      clearInterval(introLoadCheckInterval);
+      document.getElementById('introLoading').classList.add('hidden');
+      document.getElementById('introVideoLayer').classList.add('hidden');
+      document.getElementById('introFallback').classList.remove('hidden');
+      document.getElementById('introFallback').classList.add('intro-fade-in');
+
+      setTimeout(() => {
+        transitionIntroToMenu();
+      }, 2500);
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // ✅ setupIntroScreen() com ÁUDIO CORRIGIDO:
+    //   1. Tenta autoplay COM SOM primeiro
+    //   2. Se bloqueado, cai para mudo
+    //   3. Qualquer clique/tecla na página ativa o som automaticamente
+    //   4. Botão "🔊 ATIVAR SOM" também ativa
+    //   5. Corrigido o bug de volume=0 que nunca era restaurado
+    // ═══════════════════════════════════════════════════════════════════════
+    function setupIntroScreen() {
+      const introScreen = document.getElementById('introScreen');
+      const titleScreen = document.getElementById('titleScreen');
+
+      console.group('🎬 DIAGNÓSTICO DO TRAILER');
+      console.log('Protocolo:', window.location.protocol);
+      console.log('URL completa:', window.location.href);
+      console.groupEnd();
+
+      if (shouldSkipIntro()) {
+        introScreen.classList.add('hidden');
+        introScreen.classList.remove('active');
+        titleScreen.classList.remove('hidden');
+        titleScreen.classList.add('active');
+        gameState = "MENU";
+        return;
+      }
+
+      introScreen.classList.remove('hidden');
+      introScreen.classList.add('active');
+      titleScreen.classList.remove('active');
+      titleScreen.classList.add('hidden');
+      gameState = "INTRO";
+
+      introVideoEl = document.getElementById('introVideo');
+      const btnSound = document.getElementById('btnIntroSound');
+      const btnSkip = document.getElementById('btnIntroSkip');
+      const btnStart = document.getElementById('btnIntroStart');
+      const chkDontShow = document.getElementById('chkDontShowIntro');
+      const progressBar = document.getElementById('introProgressBar');
+
+      try {
+        chkDontShow.checked = localStorage.getItem(INTRO_STORAGE_KEY) === 'true';
+      } catch (e) {}
+
+      chkDontShow.addEventListener('change', () => {
+        setSkipIntroFlag(chkDontShow.checked);
+      });
+
+      // Barra de progresso
+      let fakeProgress = 0;
+      introLoadCheckInterval = setInterval(() => {
+        if (fakeProgress < 90) {
+          fakeProgress += Math.random() * 12 + 4;
+          progressBar.style.width = Math.min(fakeProgress, 90) + '%';
+        }
+      }, 120);
+
+      introVideoEl.addEventListener('progress', () => {
+        try {
+          if (introVideoEl.buffered.length > 0 && introVideoEl.duration > 0) {
+            const pct = (introVideoEl.buffered.end(0) / introVideoEl.duration) * 100;
+            progressBar.style.width = Math.min(pct, 95) + '%';
+          }
+        } catch (e) {}
+      });
+
+      // ✅ FUNÇÃO: ativa o áudio corretamente (muted=false, volume=1)
+      function enableAudio() {
+        if (!introVideoEl) return;
+        introVideoEl.muted = false;
+        introVideoEl.volume = 1;
+        btnSound.textContent = '🔇 DESATIVAR SOM';
+        btnSound.classList.remove('hidden');
+        console.log('🔊 Áudio ativado | muted:', introVideoEl.muted, '| volume:', introVideoEl.volume);
+      }
+
+      function disableAudio() {
+        if (!introVideoEl) return;
+        introVideoEl.muted = true;
+        btnSound.textContent = '🔊 ATIVAR SOM';
+        console.log('🔇 Áudio desativado');
+      }
+
+      // ✅ AUTOPLAY EM 3 CAMADAS
+      let autoplayAttempted = false;
+      let audioUnlocked = false;
+
+      function attemptAutoplay() {
+        if (!introVideoEl) return;
+        if (autoplayAttempted) return;
+        if (introVideoEl.readyState < 1) return;
+
+        autoplayAttempted = true;
+
+        console.log('🎬 Tentando autoplay COM SOM primeiro...');
+
+        // CAMADA 1: com som
+        introVideoEl.muted = false;
+        introVideoEl.volume = 1;
+
+        const playPromise = introVideoEl.play();
+
+        if (playPromise !== undefined) {
+          playPromise
+            .then(() => {
+              console.log('✅ Autoplay COM SOM funcionou!');
+              audioUnlocked = true;
+              showIntroVideo();
+              btnSound.textContent = '🔇 DESATIVAR SOM';
+              btnSound.classList.remove('hidden');
+              clearInterval(introLoadCheckInterval);
+              progressBar.style.width = '100%';
+            })
+            .catch((error) => {
+              console.warn('⚠️ Autoplay com som bloqueado:', error.name);
+              console.log('🎬 Tentando autoplay MUDO (fallback)...');
+
+              // CAMADA 2: muda
+              introVideoEl.muted = true;
+
+              const mutedPromise = introVideoEl.play();
+              if (mutedPromise !== undefined) {
+                mutedPromise
+                  .then(() => {
+                    console.log('✅ Autoplay MUDO funcionou. Clique em 🔊 ATIVAR SOM.');
+                    showIntroVideo();
+                    btnSound.textContent = '🔊 ATIVAR SOM';
+                    btnSound.classList.remove('hidden');
+                    clearInterval(introLoadCheckInterval);
+                    progressBar.style.width = '100%';
+                  })
+                  .catch((err2) => {
+                    console.error('❌ Autoplay bloqueado até mudo:', err2.name);
+                    showIntroVideo();
+                    btnSound.classList.add('hidden');
+                    btnStart.classList.remove('hidden');
+                  });
+              }
+            });
+        }
+      }
+
+      function onReady() {
+        console.log('📊 Vídeo pronto — readyState:', introVideoEl.readyState,
+                    '| duração:', introVideoEl.duration + 's');
+        clearInterval(introLoadCheckInterval);
+        progressBar.style.width = '100%';
+        attemptAutoplay();
+      }
+
+      if (introVideoEl.readyState >= 1) {
+        console.log('⚡ Vídeo já estava carregado (readyState=' + introVideoEl.readyState + ')');
+        onReady();
+      } else {
+        introVideoEl.addEventListener('loadedmetadata', onReady, { once: true });
+      }
+
+      const readyCheckInterval = setInterval(() => {
+        if (introVideoEl.readyState >= 1) {
+          clearInterval(readyCheckInterval);
+          onReady();
+        }
+      }, 300);
+      setTimeout(() => clearInterval(readyCheckInterval), 15000);
+
+      // ✅ CAMADA 3: qualquer clique/tecla na página ativa o som
+      function unlockAudioOnInteraction() {
+        if (audioUnlocked) return;
+        if (!introVideoEl) return;
+        if (introVideoEl.muted === false) return;
+
+        console.log('🔓 Interação detectada — liberando áudio...');
+        audioUnlocked = true;
+        enableAudio();
+        if (introVideoEl.paused) {
+          introVideoEl.play().catch(() => {});
+        }
+      }
+
+      const interactionEvents = ['click', 'keydown', 'touchstart', 'pointerdown'];
+      interactionEvents.forEach(evt => {
+        document.addEventListener(evt, unlockAudioOnInteraction, { once: true, passive: true });
+      });
+
+      // OUTROS EVENTOS
+      introVideoEl.addEventListener('canplay', () => {
+        console.log('▶️ canplay');
+        attemptAutoplay();
+      });
+
+      introVideoEl.addEventListener('playing', () => {
+        console.log('▶️ playing | muted:', introVideoEl.muted, '| volume:', introVideoEl.volume);
+        showIntroVideo();
+      });
+
+      introVideoEl.addEventListener('ended', () => {
+        console.log('⏹️ ended');
+        transitionIntroToMenu();
+      });
+
+      introVideoEl.addEventListener('error', () => {
+        const err = introVideoEl.error;
+        console.error('❌ ERRO NO VÍDEO:');
+        if (err) {
+          console.error('  Código:', err.code, '| Mensagem:', err.message);
+          switch (err.code) {
+            case 1: console.error('  → MEDIA_ERR_ABORTED'); break;
+            case 2: console.error('  → MEDIA_ERR_NETWORK (arquivo não encontrado?)'); break;
+            case 3: console.error('  → MEDIA_ERR_DECODE'); break;
+            case 4: console.error('  → MEDIA_ERR_SRC_NOT_SUPPORTED'); break;
+          }
+        }
+        showIntroFallback();
+      });
+
+      introVideoEl.addEventListener('stalled', () => {
+        console.warn('⚠️ stalled');
+      });
+
+      setTimeout(() => {
+        if (introSkipRequested) return;
+        if (introVideoEl.readyState < 2) {
+          console.warn('⏱️ TIMEOUT 6s — readyState:', introVideoEl.readyState);
+          attemptAutoplay();
+        }
+      }, 6000);
+
+      // BOTÕES
+      btnSound.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (!introVideoEl) return;
+        if (introVideoEl.muted) {
+          enableAudio();
+        } else {
+          disableAudio();
+        }
+        if (introVideoEl.paused) {
+          introVideoEl.play().catch(() => {});
+        }
+      });
+
+      setTimeout(() => {
+        btnSkip.classList.remove('hidden');
+        btnSkip.classList.add('intro-fade-in');
+      }, 2000);
+
+      btnSkip.addEventListener('click', () => {
+        sound.playSfxSelect();
+        transitionIntroToMenu();
+      });
+
+      btnStart.addEventListener('click', () => {
+        btnStart.classList.add('hidden');
+        if (introVideoEl) {
+          enableAudio();
+          const p = introVideoEl.play();
+          if (p) {
+            p.then(() => {
+              console.log('✅ Play manual com som funcionou');
+              showIntroVideo();
+            }).catch((e) => {
+              console.error('❌ Play manual falhou:', e.name, e.message);
+              introVideoEl.muted = true;
+              btnSound.textContent = '🔊 ATIVAR SOM';
+              introVideoEl.play().catch(() => showIntroFallback());
+            });
+          }
+        }
+      });
+    }
+
+    function replayIntroTrailer() {
+      sound.playSfxSelect();
+      setSkipIntroFlag(false);
+      try {
+        localStorage.removeItem(INTRO_STORAGE_KEY);
+      } catch (e) {}
+
+      introSkipRequested = false;
+
+      document.querySelectorAll('.screen').forEach(s => {
+        s.classList.remove('active');
+        s.classList.add('hidden');
+      });
+
+      const introScreen = document.getElementById('introScreen');
+      introScreen.classList.remove('hidden');
+      introScreen.classList.add('active');
+
+      document.getElementById('introLoading').classList.remove('hidden');
+      document.getElementById('introVideoLayer').classList.add('hidden');
+      document.getElementById('introFallback').classList.add('hidden');
+      document.getElementById('introProgressBar').style.width = '0%';
+      document.getElementById('btnIntroSkip').classList.add('hidden');
+      document.getElementById('btnIntroStart').classList.add('hidden');
+      document.getElementById('btnIntroSound').classList.add('hidden');
+
+      const videoLayer = document.getElementById('introVideoLayer');
+      const oldVideo = document.getElementById('introVideo');
+      const newVideo = oldVideo.cloneNode(false);
+      newVideo.id = 'introVideo';
+      newVideo.src = 'assets/abertura.mp4';
+      newVideo.muted = true;
+      newVideo.playsInline = true;
+      newVideo.preload = 'metadata';
+      videoLayer.replaceChild(newVideo, oldVideo);
+
+      setupIntroScreen();
+    }
+
     window.onload = () => {
       drawPreviews();
       requestAnimationFrame(gameLoop);
+
+      setTimeout(() => {
+        setupIntroScreen();
+      }, 100);
     };
   </script>
 </body>
